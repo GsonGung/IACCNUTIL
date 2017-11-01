@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.OperLogDao">
+    <resultMap id="BaseResultMap" type="OperLog">
+        <id column="F_ID" jdbcType="INTEGER" property="id"/>
+        <result column="F_OPEN_ID" jdbcType="VARCHAR" property="openId"/>
+        <result column="F_TYPE" jdbcType="TINYINT" property="type"/>
+        <result column="F_STATE" jdbcType="TINYINT" property="state"/>
+        <result column="F_CONTENT" jdbcType="VARCHAR" property="content"/>
+        <result column="F_REMARK" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        T.F_ID, T.F_OPEN_ID, T.F_TYPE, T.F_STATE, T.F_CONTENT, T.F_REMARK
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_OPER_LOG T
+        WHERE T.F_ID = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM T_OPER_LOG
+        WHERE F_ID = #{id}
+    </delete>
+    <insert id="insert" parameterType="OperLog">
+        INSERT INTO T_OPER_LOG (F_ID, F_OPEN_ID, F_TYPE, F_STATE,
+                                F_CONTENT, F_REMARK)
+        VALUES (#{id}, #{openId}, #{type}, #{state},
+                #{content}, #{remark})
+    </insert>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.CorpDao">
+    <resultMap id="BaseResultMap" type="Corp">
+        <id column="F_CORP_ID" property="corpId"/>
+        <result column="F_NAME" property="name"/>
+        <result column="F_CODE" property="code"/>
+        <result column="F_MARKET" property="market"/>
+        <result column="F_CURR_CAPITAL" property="currCapital"/>
+        <result column="F_LISTING_DATE" property="listingDate"/>
+        <result column="F_PROFIT_FOUR" property="profitFour"/>
+        <result column="F_TOTAL_CAPITAL" property="totalCapital"/>
+        <result column="F_MGJZC" property="mgjzc"/>
+        <result column="F_PINYIN" property="pinyin"/>
+        <result column="F_STOCK_TYPE" property="stockType"/>
+        <result column="F_STATUS" property="status"/>
+        <result column="F_STATE" property="state"/>
+    </resultMap>
+    <resultMap id="StockResultMap" type="StockVo">
+        <id column="F_CORP_ID" property="corpId"/>
+        <result column="F_NAME" property="name"/>
+        <result column="F_CODE" property="code"/>
+        <result column="F_MARKET" property="market"/>
+        <result column="F_STOCK_TYPE" property="stockType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        T.F_CORP_ID, T.F_NAME, T.F_CODE, T.F_MARKET, T.F_CURR_CAPITAL, T.F_LISTING_DATE, T.F_PROFIT_FOUR,
+        T.F_TOTAL_CAPITAL, T.F_MGJZC, T.F_PINYIN, T.F_STOCK_TYPE, T.F_STATUS, T.F_STATE
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM T_CORP T
+        WHERE T.F_CORP_ID = #{corpId}
+    </select>
+    <select id="matchCode" parameterType="String" resultMap="StockResultMap">
+        SELECT
+            T.F_CORP_ID,
+            T.F_NAME,
+            T.F_CODE,
+            T.F_MARKET,
+            T.F_STOCK_TYPE
+        FROM T_CORP T
+        WHERE F_CODE LIKE CONCAT('%', #{code}, '%')
+        LIMIT 10
+    </select>
+    <!-- 对应接口DAO中的deleteByPrimaryKey方法名；请保持一致 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM T_CORP
+        WHERE F_CORP_ID = #{corpId}
+    </delete>
+    <insert id="insert" parameterType="Corp">
+        INSERT INTO T_CORP (F_NAME, F_CODE, F_MARKET, F_CURR_CAPITAL, F_LISTING_DATE, F_PROFIT_FOUR, F_TOTAL_CAPITAL,
+                            F_MGJZC, F_PINYIN, F_STOCK_TYPE, F_STATUS, F_STATE)
+        VALUES (#{name}, #{code}, #{market}, #{currCapital}, #{listingDate}, #{profitFour}, #{totalCapital}, #{mgjzc},
+                         #{pinyin}, #{stockType}, #{status}, #{state})
+    </insert>
+    <insert id="insertList" parameterType="list">
+        <foreach collection="list" separator=";" item="c">
+            INSERT INTO T_CORP (F_NAME, F_CODE, F_MARKET, F_CURR_CAPITAL, F_LISTING_DATE, F_PROFIT_FOUR, F_TOTAL_CAPITAL,
+                F_MGJZC, F_PINYIN, F_STOCK_TYPE, F_STATUS, F_STATE)
+            VALUES (#{c.name}, #{c.code}, #{c.market}, #{c.currCapital}, #{c.listingDate}, #{c.profitFour}, #{c.totalCapital}, #{c.mgjzc},
+                #{c.pinyin}, #{c.stockType}, #{c.status}, #{c.state})
+        </foreach>
+    </insert>
+</mapper>

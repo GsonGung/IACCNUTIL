@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="common">
+    <resultMap id="treeMap" type="tree">
+        <id column="F_ID" property="id"/>
+        <result column="F_PID" property="pId"/>
+        <result column="F_NAME" property="name"/>
+        <result column="F_TYPE" property="type"/>
+        <result column="F_CHKDISABLED" property="chkDisabled"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.HomeDao">
+    <resultMap id="BaseResultMap" type="Menu">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="IACCN_ModuleId" jdbcType="VARCHAR" property="moduleId"/>
+        <result column="IACCN_ParentId" jdbcType="TINYINT" property="parentId"/>
+        <result column="IACCN_EnCode" jdbcType="TINYINT" property="enCode"/>
+        <result column="IACCN_FullName" jdbcType="VARCHAR" property="fullName"/>
+        <result column="IACCN_Icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="IACCN_UrlAddress" jdbcType="VARCHAR" property="urlAddress"/>
+        <result column="IACCN_Target" jdbcType="VARCHAR" property="target"/>
+        <result column="IACCN_IsMenu" jdbcType="VARCHAR" property="isMenu"/>
+        <result column="IACCN_AllowExpand" jdbcType="VARCHAR" property="allowExpand"/>
+        <result column="IACCN_IsPublic" jdbcType="VARCHAR" property="isPublic"/>
+        <result column="IACCN_AllowEdit" jdbcType="VARCHAR" property="allowEdit"/>
+        <result column="IACCN_AllowDelete" jdbcType="VARCHAR" property="allowDelete"/>
+        <result column="IACCN_Status" jdbcType="VARCHAR" property="status"/>
+        <result column="IACCN_SortCode" jdbcType="VARCHAR" property="sortCode"/>
+        <result column="IACCN_DeleteMark" jdbcType="VARCHAR" property="deleteMark"/>
+        <result column="IACCN_EnabledMark" jdbcType="VARCHAR" property="enabledMark"/>
+        <result column="IACCN_Description" jdbcType="VARCHAR" property="description"/>
+        <result column="IACCN_CreateDate" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="IACCN_CreateUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="IACCN_CreateUserName" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="IACCN_ModifyDate" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="IACCN_ModifyUserId" jdbcType="VARCHAR" property="modifyUserId"/>
+        <result column="IACCN_ModifyUserName" jdbcType="VARCHAR" property="modifyUserName"/>
+    </resultMap>
+    <select id="toLoadMenuList" resultMap="BaseResultMap">
+        SELECT * FROM IACCN_MENU_INFO
+    </select>
+
+</mapper>
