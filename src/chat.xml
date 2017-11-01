@@ -28,12 +28,20 @@
   			  <property name="suffix" value=".jsp" /> 
   	 </bean> -->
 	<!-- activeMQ connectionFactory组件 -->
-	<amq:connectionFactory id="activeMQConnectionFactory" 
+<!-- 	<amq:connectionFactory id="activeMQConnectionFactory" 
 		brokerURL="tcp://localhost:61616" userName="admin" password="admin"/>
 	<bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
 		<property name="targetConnectionFactory" ref="activeMQConnectionFactory"></property>
 		<property name="sessionCacheSize" value="100"></property>
+	</bean> -->
+	
+	<bean id="mqConnectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+    	<property name = "brokerURL" value="tcp://localhost:61616" />
+    	<property name = "userName" value="admin" />
+    	<property name = "password" value="admin" />
+    	<property name="sessionCacheSize" value="100"></property>
 	</bean>
+
 	<!-- jmsTemplate 消息生产者   start-->
 	<!-- topic 类型-->
 	<bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
