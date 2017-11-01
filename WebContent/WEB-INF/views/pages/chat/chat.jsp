@@ -1,9 +1,9 @@
-<%@ page language="java" import="java.util.*,javax.*" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+    String path = request.getContextPath();
+    String basePath =request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+    String commonPath = basePath + "static/common/";
 %>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -14,14 +14,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <script type="text/javascript" src="<%= path%>/js/jquery-1.11.3.js"></script>
+   <script type="text/javascript" src="<%=commonPath%>jquery/jQuery-2.2.0.min.js"></script>
    <script type="text/javascript">
       $(function(){
     	  initSocket();//初始化websocket
 
       });
       function initSocket() {
-    		
+    		debugger;
     		var webSocket = null;
     		
     	    window.onbeforeunload = function () {

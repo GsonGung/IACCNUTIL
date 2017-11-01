@@ -1,4 +1,4 @@
-package com.demo.chat.controller;
+package com.demo.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -6,12 +6,14 @@ import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.demo.chat.producer.TopicSender;
+import com.demo.producer.TopicSender;
 
 /**
  * 
@@ -22,6 +24,7 @@ import com.demo.chat.producer.TopicSender;
 @RequestMapping("/activemq")
 public class ActivemqController
 {
+    protected static final Logger logger = LoggerFactory.getLogger(ActivemqController.class);
     
     @Resource
     TopicSender topicSender;
@@ -36,6 +39,8 @@ public class ActivemqController
     @RequestMapping("topicSender")
     public String queueSender(@RequestParam("message") String message, HttpSession session)
     {
+        logger.info("消息：{}", message);
+        
         String opt = "";
         String username = session.getAttribute("username").toString();
         message = username + " " + getCurTime() + ":" + message;

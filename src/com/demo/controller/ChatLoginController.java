@@ -1,4 +1,4 @@
-package com.demo.chat.controller;
+package com.demo.controller;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ChatLoginController
 {
     protected static final Logger logger = LoggerFactory.getLogger(ChatLoginController.class);
+    
+    @RequestMapping("/register")
+    public String register()
+    {
+        logger.info("user register page......");
+        return "/pages/chat/login";
+    }
     
     @RequestMapping("/login")
     public String login(String username, HttpSession session)

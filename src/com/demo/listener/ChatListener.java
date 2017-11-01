@@ -1,4 +1,4 @@
-package com.demo.chat.listener;
+package com.demo.listener;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.demo.chat.controller.WebsocketController;
+import com.demo.controller.WebsocketController;
 
 @Component("chatListener")
 public class ChatListener implements MessageListener{

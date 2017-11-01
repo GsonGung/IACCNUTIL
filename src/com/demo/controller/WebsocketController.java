@@ -1,4 +1,4 @@
-package com.demo.chat.controller;
+package com.demo.controller;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,6 +45,7 @@ public class WebsocketController
     @OnMessage
     public String onMessage(@PathParam("myWebsocket") String myWebsocket, String message)
     {
+        logger.info("received message:" + message);
         return "Got your message (" + message + ").Thanks !";
     }
     
@@ -80,6 +81,7 @@ public class WebsocketController
      */
     public static void broadcast(String message)
     {
+        logger.info("sending message return to client:" + message);
         for (Session session : clients.values())
         {
             session.getAsyncRemote().sendText(message);
