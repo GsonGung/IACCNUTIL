@@ -5,8 +5,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import com.demo.controller.WebsocketController;
@@ -14,7 +14,7 @@ import com.demo.controller.WebsocketController;
 @Component("chatListener")
 public class ChatListener implements MessageListener{
     
-	protected static final Logger logger = LoggerFactory.getLogger(ChatListener.class);
+	private static Log logger = LogFactory.getLog(ChatListener.class);
 	
 	public void onMessage(Message message) {
 		 logger.info("[ChatListener.onMessage]:begin onMessage......");

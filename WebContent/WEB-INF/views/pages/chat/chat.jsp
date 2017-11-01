@@ -21,7 +21,7 @@
 
       });
       function initSocket() {
-    		debugger;
+    	  
     		var webSocket = null;
     		
     	    window.onbeforeunload = function () {
@@ -33,7 +33,7 @@
     	        return false;
     	    }
 
-    	    var target = 'ws://' + window.location.host + "/webchat/websocket/${sessionScope.username}";  
+    	    var target = 'ws://' + window.location.host + "/IACCNUTIL/websocket/${sessionScope.username}";  
     			  
     			if ('WebSocket' in window) {  
     				webSocket = new WebSocket(target);  
@@ -68,7 +68,7 @@
 
     	    // 建立连接
     	    webSocket.onopen = function (event) {
-    	        console.log(event);
+    	       console.log(event);
     	       console.log(webSocket);
     	    };
 

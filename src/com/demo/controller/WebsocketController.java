@@ -1,14 +1,23 @@
 package com.demo.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.websocket.*;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * 功能说明：websocket处理类, 使用J2EE7的标准
@@ -19,7 +28,7 @@ import org.slf4j.LoggerFactory;
 @ServerEndpoint("/websocket/{myWebsocket}")
 public class WebsocketController
 {
-    private static final Logger logger = LoggerFactory.getLogger(WebsocketController.class);
+	private static Log logger = LogFactory.getLog(WebsocketController.class);
     
     public static Map<String, Session> clients = new ConcurrentHashMap<String, Session>();
     
@@ -27,9 +36,10 @@ public class WebsocketController
      * 打开连接时触发
      * @param myWebsocket
      * @param session
+     * @throws UnsupportedEncodingException 
      */
     @OnOpen
-    public void onOpen(@PathParam("myWebsocket") String myWebsocket, Session session)
+    public void onOpen(@PathParam("myWebsocket") String myWebsocket, Session session) throws UnsupportedEncodingException
     {
         logger.info("Websocket Start Connecting:" + myWebsocket);
         System.out.println("进入：" + myWebsocket);

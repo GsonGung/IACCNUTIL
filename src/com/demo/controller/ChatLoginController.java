@@ -1,9 +1,11 @@
 package com.demo.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("chatLogin")
 public class ChatLoginController
 {
-    protected static final Logger logger = LoggerFactory.getLogger(ChatLoginController.class);
+	private static Log logger = LogFactory.getLog(ChatLoginController.class);
     
     @RequestMapping("/register")
     public String register()
@@ -21,7 +23,7 @@ public class ChatLoginController
     }
     
     @RequestMapping("/login")
-    public String login(String username, HttpSession session)
+    public String login(String username, HttpSession session) throws UnsupportedEncodingException
     {
         logger.info(username + "come in.....");
         logger.info("sessionId:" + session.getId());
