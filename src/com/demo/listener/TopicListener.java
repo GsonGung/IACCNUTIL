@@ -11,19 +11,20 @@ import org.springframework.stereotype.Component;
 
 import com.demo.controller.WebsocketController;
 
-@Component("chatListener")
-public class ChatListener implements MessageListener{
+@Component("topicListener")
+public class TopicListener implements MessageListener{
     
-	private static Log logger = LogFactory.getLog(ChatListener.class);
+	private static Log logger = LogFactory.getLog(TopicListener.class);
 	
+	@Override
 	public void onMessage(Message message) {
-		 logger.info("[ChatListener.onMessage]:begin onMessage......");
+		 logger.info("[TopicListener.onMessage]:begin onMessage......");
 	        TextMessage textMessage = (TextMessage) message;
 	        try {
 	        	 String jsonStr = textMessage.getText();
 	        	 WebsocketController.broadcast(jsonStr);
 			} catch (JMSException e) {
-				 logger.error("[ChatListener.onMessage]:receive message occured an exception",e);
+				 logger.error("[TopicListener.onMessage]:receive message occured an exception",e);
 			}
 		 logger.info("[ClientPushListener.onMessage]:end onMessage.");
 	}

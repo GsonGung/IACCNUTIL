@@ -1,64 +1,94 @@
 package com.demo.pojo;
 
-public class User {
-    private String openId;
+import java.io.Serializable;
 
-    private String name;
+public class User implements Serializable {
+    
+    private static final long serialVersionUID = 5405017927166524992L;
 
-    private String eid;
+    private int id;
 
-    private String photoUrl;
+    private String username;
 
-    private String phone;
+    private String realname;
 
-    public User() {
+    private String password;
+
+    private String gender;
+    
+    private String imgUrl;
+    
+    public User() {}
+
+    public User(int id, String username, String realname, String password, String gender, String imgUrl)
+    {
+        super();
+        this.id = id;
+        this.username = username;
+        this.realname = realname;
+        this.password = password;
+        this.gender = gender;
+        this.imgUrl = imgUrl;
     }
 
-    public User(String openId, String name, String eid, String photoUrl, String phone) {
-        this.openId = openId;
-        this.name = name;
-        this.eid = eid;
-        this.photoUrl = photoUrl;
-        this.phone = phone;
+    public int getId()
+    {
+        return id;
     }
 
-    public String getOpenId() {
-        return openId;
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId == null ? null : openId.trim();
+    public String getUsername()
+    {
+        return username;
     }
 
-    public String getName() {
-        return name;
+    public void setUsername(String username)
+    {
+        this.username = username;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public String getRealname()
+    {
+        return realname;
     }
 
-    public String getEid() {
-        return eid;
+    public void setRealname(String realname)
+    {
+        this.realname = realname;
     }
 
-    public void setEid(String eid) {
-        this.eid = eid == null ? null : eid.trim();
+    public String getPassword()
+    {
+        return password;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public String getGender()
+    {
+        return gender;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setGender(String gender)
+    {
+        this.gender = gender;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public String getImgUrl()
+    {
+        return imgUrl;
     }
+
+    public void setImgUrl(String imgUrl)
+    {
+        this.imgUrl = imgUrl;
+    }
+
 }

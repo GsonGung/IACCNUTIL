@@ -18,7 +18,6 @@
    <script type="text/javascript">
       $(function(){
     	  initSocket();//初始化websocket
-
       });
       function initSocket() {
     	  

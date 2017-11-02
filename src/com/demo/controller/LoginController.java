@@ -1,7 +1,10 @@
 package com.demo.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,6 +12,7 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +21,8 @@ import com.demo.common.Constant;
 import com.demo.exception.CaptchaException;
 import com.demo.exception.ConnectException;
 import com.demo.exception.DisabledCorpException;
-import com.demo.utils.CustomWebUtils;
+import com.demo.pojo.User;
+import com.demo.service.LoginService;
 
 /**
  * 
@@ -37,6 +42,9 @@ public class LoginController extends BaseController
      * 日志封装类
      */
     public static final Log logger = LogFactory.getLog(LoginController.class);
+    
+    @Autowired
+    private LoginService loginService;
     
     /**
      * 
@@ -89,20 +97,35 @@ public class LoginController extends BaseController
      */
     @ResponseBody
     @RequestMapping(value = "/loginValidate")
-    public String loginValidate(HttpServletRequest request, HttpServletResponse response)
+    public String loginValidate(HttpServletRequest request, HttpServletResponse response, HttpSession session)
     {
         String resultJson="";
 
         try
         {
-            boolean isAjax = CustomWebUtils.isAjax(request);
+            //boolean isAjax = CustomWebUtils.isAjax(request);
             
             String emp_DomainName = request.getParameter("emp_DomainName");
             String emp_Password = request.getParameter("emp_Password");
             
             System.out.println(emp_DomainName + "=" + emp_Password);
-            if ("admin".equals(emp_DomainName) && "000000".equals(emp_Password))
+            //查询数据库验证
+            User user = loginService.queryUserByAccount(emp_DomainName, emp_Password);
+            
+            System.out.println(emp_DomainName + "=" + emp_Password);
+            
+            if (user != null)
             {
+                //用户账号添加到Session
+                session.setAttribute("username", user.getUsername());
+                session.setAttribute("realname", user.getRealname());
+                session.setAttribute("imgUrl", user.getImgUrl());
+                
+                List<User> userList = loginService.queryUserList();
+                session.setAttribute("userList", userList);
+                logger.info("userList:" + userList);
+                
+                logger.info("用户<" + user.getRealname() +">登录系统了......");
                 resultJson ="0000";
             }
             else

@@ -125,8 +125,8 @@
                         <!--个人头像-->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="<%=resourcePath%>img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Andy·Gong</span>
+                                <img src="<%=commonPath%>${sessionScope.imgUrl}" class="user-image" alt="User Image">
+                                <span class="hidden-xs">${sessionScope.realname}</span>
                             </a>
                             <!--点击头像，显示下拉菜单-->
                             <ul class="dropdown-menu pull-right">
@@ -151,11 +151,11 @@
                 <div class="user-panel">
                     <!--头像-->
                     <div class="pull-left image">
-                        <img src="<%=resourcePath%>img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="<%=commonPath%>${sessionScope.imgUrl}" class="img-circle" alt="User Image">
                     </div>
                     <!--个人信息和状态-->
                     <div style="top:10px;" class="pull-left info">
-                        <p>Andy·Gong</p>
+                        <p>${sessionScope.realname}</p>
                         <a><i class="fa fa-circle text-success"></i>在线</a>
                     </div>
                 </div>

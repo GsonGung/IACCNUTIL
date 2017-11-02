@@ -20,6 +20,9 @@ public class CustomWebUtils {
      * @return
      */
     public static boolean isAjax(HttpServletRequest request) {
+        System.out.println(request);
+        System.out.println(request.getHeader("accept"));
+        System.out.println(request.getHeader("X-Requested-With"));
         return request.getHeader("accept").indexOf("application/json") > -1
                 || (request.getHeader("X-Requested-With") != null && request.getHeader("X-Requested-With")
                 .indexOf("XMLHttpRequest") > -1);

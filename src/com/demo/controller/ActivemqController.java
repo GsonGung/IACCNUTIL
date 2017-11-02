@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.demo.producer.TopicSender;
 
 /**
@@ -36,17 +37,62 @@ public class ActivemqController
      * @return String
      */
     @ResponseBody
-    @RequestMapping("topicSender")
+    @RequestMapping("queueSender")
     public String queueSender(@RequestParam("message") String message, HttpSession session)
     {
-        logger.info("消息：" + message);
+        logger.info("队列消息：" + message);
         
         String opt = "";
         String username = session.getAttribute("username").toString();
-        message = username + " " + getCurTime() + ":" + message;
+        String realname = session.getAttribute("realname").toString();
+        String imgUrl = session.getAttribute("imgUrl").toString();
+        JSONObject json = new JSONObject();
+        json.put("username", username);
+        json.put("realname", realname);
+        json.put("imgUrl", imgUrl);
+        json.put("message", message);
+        json.put("sendTime", getCurTime());
+        String jsonMsg = json.toJSONString();
+        
         try
         {
-            topicSender.send("websocket.topic", message);
+            topicSender.send("websocket.topic", jsonMsg);
+            opt = "suc";
+        }
+        catch (Exception e)
+        {
+            opt = e.getCause().toString();
+        }
+        return opt;
+    }
+    
+    /**
+     * 发送消息到主题
+     * Topic主题：所有订阅该主题的用户都可以收到
+     * @param message
+     * @return String
+     */
+    @ResponseBody
+    @RequestMapping("topicSender")
+    public String topicSender(@RequestParam("message") String message, HttpSession session)
+    {
+        logger.info("主题消息：" + message);
+        
+        String opt = "";
+        String username = session.getAttribute("username").toString();
+        String realname = session.getAttribute("realname").toString();
+        String imgUrl = session.getAttribute("imgUrl").toString();
+        JSONObject json = new JSONObject();
+        json.put("username", username);
+        json.put("realname", realname);
+        json.put("imgUrl", imgUrl);
+        json.put("message", message);
+        json.put("sendTime", getCurTime());
+        String jsonMsg = json.toJSONString();
+        
+        try
+        {
+            topicSender.send("websocket.topic", jsonMsg);
             opt = "suc";
         }
         catch (Exception e)

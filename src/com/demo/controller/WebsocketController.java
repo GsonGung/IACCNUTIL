@@ -1,10 +1,6 @@
 package com.demo.controller;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -84,7 +80,7 @@ public class WebsocketController
     }
     
     /**
-     * 将数据传回客户端
+     * 将数据传回客户端(主题)
      * 异步的方式
      * @param myWebsocket
      * @param message
@@ -95,6 +91,24 @@ public class WebsocketController
         for (Session session : clients.values())
         {
             session.getAsyncRemote().sendText(message);
+        }
+    }
+    
+    /**
+     * 将数据传回客户端(队列)
+     * 异步的方式
+     * @param myWebsocket
+     * @param message
+     */
+    public static void broadcast(String message, String myWebsocket)
+    {
+        logger.info("sending message return to client:" + message);
+        for (String username : clients.keySet())
+        {
+            if(username.equals(myWebsocket)) {
+                Session session = clients.get(username);
+                session.getAsyncRemote().sendText(message);
+            }
         }
     }
     

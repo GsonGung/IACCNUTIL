@@ -7,6 +7,7 @@
 %>
 <!DOCTYPE html>
 <html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,7 +41,6 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
   <!-- Left side column. contains the logo and sidebar -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -326,167 +326,29 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                   <!-- Conversations are loaded here -->
-                  <div class="direct-chat-messages">
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                        <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img class="direct-chat-img" src="<%=commonPath%>dist/img/user1-128x128.jpg" alt="message user image">
-                      <!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                        Is this template really for free? That's unbelievable!
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img class="direct-chat-img" src="<%=commonPath%>dist/img/user3-128x128.jpg" alt="message user image">
-                      <!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                        You better believe it!
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                        <span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img class="direct-chat-img" src="<%=commonPath%>dist/img/user1-128x128.jpg" alt="message user image">
-                      <!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                        Working with AdminLTE on a great new app! Wanna join?
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                        <span class="direct-chat-timestamp pull-left">23 Jan 6:10 pm</span>
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <img class="direct-chat-img" src="<%=commonPath%>dist/img/user3-128x128.jpg" alt="message user image">
-                      <!-- /.direct-chat-img -->
-                      <div class="direct-chat-text">
-                        I would love to.
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                  </div>
+				  <!-- 此处需要替换为动态聊天记录 -->
+				  <div class="direct-chat-messages"></div>
                   <!--/.direct-chat-messages-->
 
                   <!-- Contacts are loaded here -->
                   <div class="direct-chat-contacts">
                     <ul class="contacts-list">
-                      <li>
-                        <a href="#">
-                          <img class="contacts-list-img" src="<%=commonPath%>dist/img/user1-128x128.jpg" alt="User Image">
-
-                          <div class="contacts-list-info">
-                                <span class="contacts-list-name">
-                                  Count Dracula
-                                  <small class="contacts-list-date pull-right">2/28/2015</small>
-                                </span>
-                            <span class="contacts-list-msg">How have you been? I was...</span>
-                          </div>
-                          <!-- /.contacts-list-info -->
-                        </a>
-                      </li>
-                      <!-- End Contact Item -->
-                      <li>
-                        <a href="#">
-                          <img class="contacts-list-img" src="<%=commonPath%>dist/img/user7-128x128.jpg" alt="User Image">
-
-                          <div class="contacts-list-info">
-                                <span class="contacts-list-name">
-                                  Sarah Doe
-                                  <small class="contacts-list-date pull-right">2/23/2015</small>
-                                </span>
-                            <span class="contacts-list-msg">I will be waiting for...</span>
-                          </div>
-                          <!-- /.contacts-list-info -->
-                        </a>
-                      </li>
-                      <!-- End Contact Item -->
-                      <li>
-                        <a href="#">
-                          <img class="contacts-list-img" src="<%=commonPath%>dist/img/user3-128x128.jpg" alt="User Image">
-
-                          <div class="contacts-list-info">
-                                <span class="contacts-list-name">
-                                  Nadia Jolie
-                                  <small class="contacts-list-date pull-right">2/20/2015</small>
-                                </span>
-                            <span class="contacts-list-msg">I'll call you back at...</span>
-                          </div>
-                          <!-- /.contacts-list-info -->
-                        </a>
-                      </li>
-                      <!-- End Contact Item -->
-                      <li>
-                        <a href="#">
-                          <img class="contacts-list-img" src="<%=commonPath%>dist/img/user5-128x128.jpg" alt="User Image">
-
-                          <div class="contacts-list-info">
-                                <span class="contacts-list-name">
-                                  Nora S. Vans
-                                  <small class="contacts-list-date pull-right">2/10/2015</small>
-                                </span>
-                            <span class="contacts-list-msg">Where is your new...</span>
-                          </div>
-                          <!-- /.contacts-list-info -->
-                        </a>
-                      </li>
-                      <!-- End Contact Item -->
-                      <li>
-                        <a href="#">
-                          <img class="contacts-list-img" src="<%=commonPath%>dist/img/user6-128x128.jpg" alt="User Image">
-
-                          <div class="contacts-list-info">
-                                <span class="contacts-list-name">
-                                  John K.
-                                  <small class="contacts-list-date pull-right">1/27/2015</small>
-                                </span>
-                            <span class="contacts-list-msg">Can I take a look at...</span>
-                          </div>
-                          <!-- /.contacts-list-info -->
-                        </a>
-                      </li>
-                      <!-- End Contact Item -->
-                      <li>
-                        <a href="#">
-                          <img class="contacts-list-img" src="<%=commonPath%>dist/img/user8-128x128.jpg" alt="User Image">
-
-                          <div class="contacts-list-info">
-                                <span class="contacts-list-name">
-                                  Kenneth M.
-                                  <small class="contacts-list-date pull-right">1/4/2015</small>
-                                </span>
-                            <span class="contacts-list-msg">Never mind I found...</span>
-                          </div>
-                          <!-- /.contacts-list-info -->
-                        </a>
-                      </li>
-                      <!-- End Contact Item -->
+						<!-- 此处替换为用户列表 -->
+  						<c:forEach items="${userList}" var="user" varStatus="stat">
+						    <li>
+		                        <a href="#">
+		                          <img class="contacts-list-img" src="<%=commonPath%>${user.imgUrl}" alt="User Image">
+		                          <div class="contacts-list-info">
+		                            <span class="contacts-list-name">
+		                              
+		                              <small class="contacts-list-date pull-right"></small>
+		                            </span>
+		                            <span class="contacts-list-msg"></span>
+		                          </div>
+		                          <!-- /.contacts-list-info -->
+		                        </a>
+                      		</li>
+						</c:forEach>
                     </ul>
                     <!-- /.contatcts-list -->
                   </div>
@@ -496,11 +358,12 @@
                 <div class="box-footer">
                   <form action="#" method="post">
                     <div class="input-group">
-                      <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                      <input type="text" id="sendMessageTextArea" name="message" placeholder="Type Message ..." class="form-control">
                       <span class="input-group-btn">
-                            <button type="button" class="btn btn-warning btn-flat">Send</button>
-                          </span>
+                         <button type="button" onclick="javascript:sendMessage();" class="btn btn-warning btn-flat">Send</button>
+                      </span>
                     </div>
+                    <span id="status">&nbsp;</span>
                   </form>
                 </div>
                 <!-- /.box-footer-->
@@ -1105,5 +968,115 @@
 <script src="<%=commonPath%>dist/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<%=commonPath%>dist/js/demo.js"></script>
+
+   <script type="text/javascript">
+      $(function(){
+    	  initSocket();//初始化websocket
+      });
+      function initSocket() {
+    	  
+    		var webSocket = null;
+    	    window.onbeforeunload = function () {
+    	        //离开页面时的其他操作
+    	    };
+
+    	    if (!window.WebSocket) {
+    	        console("您的浏览器不支持websocket！");
+    	        return false;
+    	    }
+
+    	    var target = 'ws://' + window.location.host + "/IACCNUTIL/websocket/${sessionScope.username}";  
+    			  
+   			if ('WebSocket' in window) {  
+   				webSocket = new WebSocket(target);  
+   			} else if ('MozWebSocket' in window) {  
+   				webSocket = new MozWebSocket(target);  
+   			} else {  
+   			    alert('WebSocket is not supported by this browser.');  
+   			    return;  
+   			}  
+    	    
+    	    // 收到服务端消息
+    	    webSocket.onmessage = function (event) {
+				//处理消息start
+				if(event!=null){
+         			//将json字符串转为对象
+         			var msg = eval('(' + event.data + ')'); 
+				}
+				
+				console.log("msg:" + event.data); 
+ 				
+ 				if(msg.username == '${sessionScope.username}'){
+ 					//本人的信息靠右显示
+ 					var msgRow = '';
+ 				    msgRow += '<div class="direct-chat-msg right">';
+ 				    msgRow += '<div class="direct-chat-info clearfix">';
+ 				    msgRow += '<span class="direct-chat-name pull-right">' + msg.realname + '</span>';
+ 				    msgRow += '<span class="direct-chat-timestamp pull-left">' + msg.sendTime + '</span></div>';
+ 				    msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
+ 				    msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
+ 				 	//滚轴拉到底部
+ 				    $(".direct-chat-messages").append(msgRow).scrollTop($('.direct-chat-messages')[0].scrollHeight);
+ 				}else{
+ 					//他人的信息靠左显示
+ 					var msgRow = '';
+ 					msgRow += '<div class="direct-chat-msg">';
+ 					msgRow += '<div class="direct-chat-info clearfix">';
+ 					msgRow += '<span class="direct-chat-name pull-left">' + msg.realname + '</span>';
+ 					msgRow += '<span class="direct-chat-timestamp pull-right">' + msg.sendTime + '</span></div>';
+ 					msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
+ 					msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
+ 					//滚轴拉到底部
+ 					$(".direct-chat-messages").append(msgRow).scrollTop($('.direct-chat-messages')[0].scrollHeight);
+ 				}
+ 				
+  	            //处理消息end
+    	        // 关闭连接
+    	        webSocket.onclose();
+    	    };
+    	    // 异常
+    	    webSocket.onerror = function (event) {
+    	        console.log(event);
+    	    };
+    	    // 建立连接
+    	    webSocket.onopen = function (event) {
+    	       console.log(event);
+    	       console.log(webSocket);
+    	    };
+    	    // 断线
+    	    webSocket.onclose = function () {
+    	        console.log("websocket断开连接");
+    	    };
+    	}
+      
+     	function sendMessage(){
+         	var message=$('#sendMessageTextArea').val();
+         	$.ajax({
+    			type: 'post',
+    			url:'<%=basePath%>/activemq/topicSender',
+    			dataType:'text', 
+    			data:{"message":message},
+    			success:function(data){
+    				if(data=="suc"){
+    					$("#status").html("<font color=green>发送成功</font>");
+    					setTimeout(clear,1000);
+    				}else{
+    					$("#status").html("<font color=red>"+data+"</font>");
+    					setTimeout(clear,5000);
+    				}
+    			},
+    			error:function(data){
+    				$("#status").html("<font color=red>ERROR:"+data["status"]+","+data["statusText"]+"</font>");
+    				setTimeout(clear,5000);
+    			}
+    			
+    		});
+         	$('#sendMessageTextArea').val("");
+     	}
+     	function clear(){
+     		//添加空格[&nbsp;]占用一行
+    		$("#status").html("&nbsp;");
+    	}
+   </script>
 </body>
 </html>

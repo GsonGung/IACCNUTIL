@@ -30,14 +30,14 @@ public class TopicSender
     
     /**
      * 发送一条消息到指定的队列（目标）
-     * @param queueName 队列名称
+     * @param destination 队列/主题
      * @param message 消息内容
      */
-    public void send(String topicName, final String message)
+    public void send(String destination, final String message)
     {
-        logger.info("热点：" + topicName + ",消息：" + message);
+        logger.info("队列/主题：" + destination + ",消息：" + message);
         
-        jmsTemplate.send(topicName, new MessageCreator()
+        jmsTemplate.send(destination, new MessageCreator()
         {
             @Override
             public Message createMessage(Session session)
