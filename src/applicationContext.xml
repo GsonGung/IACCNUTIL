@@ -83,8 +83,17 @@
 		<!-- 发布/订阅       true-->
 		<property name="pubSubDomain" value="true"></property>
 	</bean>
+	<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory"></property>
+		<!-- 发布/订阅       false-->
+		<property name="pubSubDomain" value="false"></property>
+	</bean>
 	<!-- jmsTemplate 消息生产者   end-->	
 	<!-- 消息消费者 start-->
+	<!-- 定义queue监听器 -->
+<!--  	<jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
+		<jms:listener destination="websocket.queue" ref="queueListener"/>
+	</jms:listener-container> -->
 	<!-- 定义topic监听器 -->
 	<jms:listener-container destination-type="topic" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
 		<jms:listener destination="websocket.topic" ref="topicListener"/>

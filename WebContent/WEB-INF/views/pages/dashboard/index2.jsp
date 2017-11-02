@@ -327,16 +327,17 @@
                 <div class="box-body">
                   <!-- Conversations are loaded here -->
 				  <!-- 此处需要替换为动态聊天记录 -->
-				  <div class="direct-chat-messages"></div>
+				  <c:forEach items="${userList}" var="user" varStatus="stat">
+				  	<div id="chat-${user.username}" class="direct-chat-messages" style="${stat.index eq 0?'':'display:none'}" ${stat.index eq 0?'active="false"':'active="true"'}></div>
+				  </c:forEach>
                   <!--/.direct-chat-messages-->
-
                   <!-- Contacts are loaded here -->
                   <div class="direct-chat-contacts">
                     <ul class="contacts-list">
 						<!-- 此处替换为用户列表 -->
   						<c:forEach items="${userList}" var="user" varStatus="stat">
 						    <li>
-		                        <a href="#">
+		                        <a onclick="javascript:$('#chat-${user.username}').attr('active',true).show();$('.direct-chat-messages:not(#chat-${user.username})').attr('active',false).hide();" data-widget="chat-pane-toggle">
 		                          <img class="contacts-list-img" src="<%=commonPath%>${user.imgUrl}" alt="User Image">
 		                          <div class="contacts-list-info">
 		                            <span class="contacts-list-name">
@@ -1016,7 +1017,7 @@
  				    msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
  				    msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
  				 	//滚轴拉到底部
- 				    $(".direct-chat-messages").append(msgRow).scrollTop($('.direct-chat-messages')[0].scrollHeight);
+ 				    $(".direct-chat-messages[active=true]").append(msgRow).scrollTop($(this)[0].scrollHeight);
  				}else{
  					//他人的信息靠左显示
  					var msgRow = '';
@@ -1027,7 +1028,7 @@
  					msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
  					msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
  					//滚轴拉到底部
- 					$(".direct-chat-messages").append(msgRow).scrollTop($('.direct-chat-messages')[0].scrollHeight);
+ 					$(".direct-chat-messages[active=true]").append(msgRow).scrollTop($(this)[0].scrollHeight);
  				}
  				
   	            //处理消息end
@@ -1049,7 +1050,7 @@
     	    };
     	}
       
-     	function sendMessage(){
+     	function sendMessage2(){
          	var message=$('#sendMessageTextArea').val();
          	$.ajax({
     			type: 'post',
@@ -1073,6 +1074,34 @@
     		});
          	$('#sendMessageTextArea').val("");
      	}
+     	
+     	function sendMessage(){
+     		console.log("sender:${sessionScope.username}");
+     		console.log("receiver:" + $('div[id^="chat"][active=true]').attr("id").replace("chat-",""));
+         	var message=$('#sendMessageTextArea').val();
+         	$.ajax({
+    			type: 'post',
+    			url:'<%=basePath%>/activemq/queueSender',
+    			dataType:'text', 
+    			data:{"message":message, "sender":'${sessionScope.username}', "receiver":$('#activeUser').val()},
+    			success:function(data){
+    				if(data=="suc"){
+    					$("#status").html("<font color=green>发送成功</font>");
+    					setTimeout(clear,1000);
+    				}else{
+    					$("#status").html("<font color=red>"+data+"</font>");
+    					setTimeout(clear,5000);
+    				}
+    			},
+    			error:function(data){
+    				$("#status").html("<font color=red>ERROR:"+data["status"]+","+data["statusText"]+"</font>");
+    				setTimeout(clear,5000);
+    			}
+    			
+    		});
+         	$('#sendMessageTextArea').val("");
+     	}
+     	
      	function clear(){
      		//添加空格[&nbsp;]占用一行
     		$("#status").html("&nbsp;");

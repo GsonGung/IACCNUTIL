@@ -35,7 +35,7 @@ public class TopicSender
      */
     public void send(String destination, final String message)
     {
-        logger.info("队列/主题：" + destination + ",消息：" + message);
+        logger.info("主题：" + destination + ",消息：" + message);
         
         jmsTemplate.send(destination, new MessageCreator()
         {

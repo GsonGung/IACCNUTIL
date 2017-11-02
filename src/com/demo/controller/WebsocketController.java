@@ -35,7 +35,7 @@ public class WebsocketController
      * @throws UnsupportedEncodingException 
      */
     @OnOpen
-    public void onOpen(@PathParam("myWebsocket") String myWebsocket, Session session) throws UnsupportedEncodingException
+    public void onOpen(@PathParam("myWebsocket") String myWebsocket, Session session)
     {
         logger.info("Websocket Start Connecting:" + myWebsocket);
         System.out.println("进入：" + myWebsocket);
@@ -51,6 +51,7 @@ public class WebsocketController
     @OnMessage
     public String onMessage(@PathParam("myWebsocket") String myWebsocket, String message)
     {
+    	logger.info("myWebsocket:" + myWebsocket);
         logger.info("received message:" + message);
         return "Got your message (" + message + ").Thanks !";
     }
@@ -100,12 +101,12 @@ public class WebsocketController
      * @param myWebsocket
      * @param message
      */
-    public static void broadcast(String message, String myWebsocket)
+    public static void broadcast(String message, String sender, String receiver)
     {
         logger.info("sending message return to client:" + message);
         for (String username : clients.keySet())
         {
-            if(username.equals(myWebsocket)) {
+            if(username.equals(sender) || username.equals(receiver)) {
                 Session session = clients.get(username);
                 session.getAsyncRemote().sendText(message);
             }
