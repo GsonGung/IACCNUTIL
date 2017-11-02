@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_31">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
@@ -12,9 +12,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.servlet-api-4.0.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javaee-api-7.0.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activation-1.1.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activemq.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aopalliance.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aspectjweaver-1.8.10.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/c3p0-0.9.1.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.9.jar"/>
@@ -30,19 +27,15 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-core-2.8.6.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-annotations-2.8.6.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpcore-4.4.6.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/standard.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-webmvc-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-web-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-tx-4.3.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-security-acl-3.1.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-jms-5.0.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-jdbc-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-expression-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-core-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-context-support-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-context-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-beans-4.3.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-aspects-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-aop-4.3.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.7.22.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/shiro-all-1.2.3.jar"/>
@@ -55,5 +48,17 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/joda-time-2.9.9.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.mail-1.5.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-databind-2.8.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activemq-client-5.14.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activemq-spring-5.14.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activemq-web-5.14.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/hawtbuf-1.11.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-jms-4.2.8.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-messaging-4.3.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xbean-spring-4.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activemq-broker-5.14.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
