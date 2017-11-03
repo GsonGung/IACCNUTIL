@@ -6,24 +6,21 @@ import java.util.Date;
 import javax.annotation.Resource;
 import javax.jms.Connection;
 import javax.jms.Destination;
-import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-
-import org.springframework.jms.connection.CachingConnectionFactory;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.demo.listener.QueueListener;
 import com.demo.producer.QueueSender;
 import com.demo.producer.TopicSender;
 
@@ -51,38 +48,45 @@ public class ActivemqController {
 	 * 
 	 * @param message
 	 * @return String
-	 * @throws JMSException
 	 */
 	@ResponseBody
 	@RequestMapping("queueSender")
 	public String queueSender(@RequestParam("message") String message, HttpSession session, String sender,
-			String receiver) throws JMSException {
+			String receiver) {
 
 		logger.info("队列消息：" + message);
+		
+        String opt = "";
 
-		Connection connection = connectionFactory.createConnection();
-		connection.start();
-		Session session0 = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
-		Destination destination = session0.createQueue("websocket.queue");
-		MessageProducer producer = session0.createProducer(destination);
+		try {
+		    Connection connection = connectionFactory.createConnection();
+	        connection.start();
+	        Session session0 = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
+	        Destination destination = session0.createQueue("websocket.queue");
+	        MessageProducer producer = session0.createProducer(destination);
 
-		String opt = "";
-		String username = session.getAttribute("username").toString();
-		String realname = session.getAttribute("realname").toString();
-		String imgUrl = session.getAttribute("imgUrl").toString();
-		JSONObject json = new JSONObject();
-		json.put("username", username);
-		json.put("realname", realname);
-		json.put("imgUrl", imgUrl);
-		json.put("message", message);
-		json.put("sendTime", getCurTime());
-		String jsonMsg = json.toJSONString();
+	        String username = session.getAttribute("username").toString();
+	        String realname = session.getAttribute("realname").toString();
+	        String imgUrl = session.getAttribute("imgUrl").toString();
+	        JSONObject json = new JSONObject();
+	        json.put("receiver", receiver);
+	        json.put("username", username);
+	        json.put("realname", realname);
+	        json.put("imgUrl", imgUrl);
+	        json.put("message", message);
+	        json.put("sendTime", getCurTime());
+	        String jsonMsg = json.toJSONString();
 
-		TextMessage msg = session0.createTextMessage(jsonMsg);
+	        TextMessage msg = session0.createTextMessage(jsonMsg);
 
-		producer.send(msg);
+	        producer.send(msg);
 
-		WebsocketController.broadcast(jsonMsg, sender, receiver);
+	        WebsocketController.broadcast(jsonMsg, sender, receiver);
+	        opt = "suc";
+		}catch(Exception e) {
+		    opt = e.getCause().toString();
+		}
+		
 
 		/*
 		 * try { queueSender.send("websocket.queue", jsonMsg); opt = "suc"; } catch

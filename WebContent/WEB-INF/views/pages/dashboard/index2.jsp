@@ -311,9 +311,9 @@
               <div class="box box-warning direct-chat direct-chat-warning">
                 <div class="box-header with-border">
                   <h3 class="box-title">Direct Chat</h3>
-
+				  <span id="receiverName" style="margin-left:20px;">与${userList[0].realname}交谈中...</span>
                   <div class="box-tools pull-right">
-                    <span data-toggle="tooltip" title="3 New Messages" class="badge bg-yellow">3</span>
+                    <span id="totalUnreadCount" data-toggle="tooltip" title="" class="badge bg-yellow" style="display:none;">0</span>
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
                     <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts"
@@ -328,7 +328,7 @@
                   <!-- Conversations are loaded here -->
 				  <!-- 此处需要替换为动态聊天记录 -->
 				  <c:forEach items="${userList}" var="user" varStatus="stat">
-				  	<div id="chat-${user.username}" class="direct-chat-messages" style="${stat.index eq 0?'':'display:none'}" ${stat.index eq 0?'active="false"':'active="true"'}></div>
+				  	<div id="chat-${user.username}" class="direct-chat-messages" style="${stat.index eq 0?'':'display:none'}"></div>
 				  </c:forEach>
                   <!--/.direct-chat-messages-->
                   <!-- Contacts are loaded here -->
@@ -336,15 +336,16 @@
                     <ul class="contacts-list">
 						<!-- 此处替换为用户列表 -->
   						<c:forEach items="${userList}" var="user" varStatus="stat">
-						    <li>
-		                        <a onclick="javascript:$('#chat-${user.username}').attr('active',true).show();$('.direct-chat-messages:not(#chat-${user.username})').attr('active',false).hide();" data-widget="chat-pane-toggle">
+						    <li id="li-${user.username}">
+		                        <a onclick="javascript:switchMessageTab('${user.username}','${user.realname}');" data-widget="chat-pane-toggle" data-toggle="tooltip">
 		                          <img class="contacts-list-img" src="<%=commonPath%>${user.imgUrl}" alt="User Image">
 		                          <div class="contacts-list-info">
 		                            <span class="contacts-list-name">
-		                              
+		                              ${user.realname}
 		                              <small class="contacts-list-date pull-right"></small>
 		                            </span>
 		                            <span class="contacts-list-msg"></span>
+		                            <span class="badge bg-yellow pull-right" style="display:none;">0</span>
 		                          </div>
 		                          <!-- /.contacts-list-info -->
 		                        </a>
@@ -1006,8 +1007,10 @@
 				}
 				
 				console.log("msg:" + event.data); 
- 				
+				
  				if(msg.username == '${sessionScope.username}'){
+ 					//会话DIV
+ 					var chatMsgDiv = $("#chat-" + msg.receiver);
  					//本人的信息靠右显示
  					var msgRow = '';
  				    msgRow += '<div class="direct-chat-msg right">';
@@ -1017,8 +1020,25 @@
  				    msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
  				    msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
  				 	//滚轴拉到底部
- 				    $(".direct-chat-messages[active=true]").append(msgRow).scrollTop($(this)[0].scrollHeight);
- 				}else{
+ 				    chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
+ 					//时间
+ 					$("#li-" + msg.receiver).find(".contacts-list-date").text(msg.sendTime);
+ 					//信息
+ 					$("#li-" + msg.receiver).find(".contacts-list-msg").text(msg.message);
+ 	 				//如果与窗口(chat_window)没有激活，生成最新信息(chat_window.latestInfo)并使未读信息数(chat_window.noReadCount)+1
+ 	 				if(!isActiveTab("chat-" + msg.receiver)){
+ 	 					//窗口未读数
+						$("#li-" + msg.receiver).find(".badge").show();
+ 	 					var unReadCount = parseInt($("#li-" + msg.receiver).find(".badge").text());
+ 	 					$("#li-" + msg.receiver).find(".badge").text(unReadCount + 1);
+ 	 					//总未读数
+ 	 					$("#totalUnreadCount").show();
+ 	 					var totalUnreadCount = parseInt($("#totalUnreadCount").text());
+ 	 					$("#totalUnreadCount").text(totalUnreadCount + 1).attr("title", (totalUnreadCount + 1) + " New Messages");
+ 	 				}
+ 				}else if(msg.receiver == '${sessionScope.username}'){
+ 					//会话DIV
+ 					var chatMsgDiv = $("#chat-" + msg.username);
  					//他人的信息靠左显示
  					var msgRow = '';
  					msgRow += '<div class="direct-chat-msg">';
@@ -1027,8 +1047,26 @@
  					msgRow += '<span class="direct-chat-timestamp pull-right">' + msg.sendTime + '</span></div>';
  					msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
  					msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
- 					//滚轴拉到底部
- 					$(".direct-chat-messages[active=true]").append(msgRow).scrollTop($(this)[0].scrollHeight);
+ 					//滚轴拉到底部(此处scrollTop(chatMsgDiv[0].scrollHeight)无效，因是隐藏元素)
+ 					//chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
+ 					chatMsgDiv.append(msgRow);
+ 					//时间
+ 					$("#li-" + msg.username).find(".contacts-list-date").text(msg.sendTime);
+ 					//信息
+ 					$("#li-" + msg.username).find(".contacts-list-msg").text(msg.message);
+ 	 				//如果与窗口(chat_window)没有激活，生成最新信息(chat_window.latestInfo)并使未读信息数(chat_window.noReadCount)+1
+ 	 				if(!isActiveTab("chat-" + msg.username)){
+						//窗口未读数
+						$("#li-" + msg.username).find(".badge").show();
+ 	 					var unReadCount = parseInt($("#li-" + msg.username).find(".badge").text());
+ 	 					$("#li-" + msg.username).find(".badge").text(unReadCount + 1);
+ 	 					//总未读数
+ 	 					$("#totalUnreadCount").show();
+ 	 					var totalUnreadCount = parseInt($("#totalUnreadCount").text());
+ 	 					$("#totalUnreadCount").text(totalUnreadCount + 1).attr("title", (totalUnreadCount + 1) + " New Messages");
+ 	 				}
+ 				}else{
+ 					alert("消息推送错误，发送者和接收者都不是本人！");
  				}
  				
   	            //处理消息end
@@ -1052,6 +1090,10 @@
       
      	function sendMessage2(){
          	var message=$('#sendMessageTextArea').val();
+     		if($.trim(message) == ''){
+     			alert("请先输入内容再发送！");
+     			return false;
+     		}
          	$.ajax({
     			type: 'post',
     			url:'<%=basePath%>/activemq/topicSender',
@@ -1075,15 +1117,20 @@
          	$('#sendMessageTextArea').val("");
      	}
      	
-     	function sendMessage(){
+     	function sendMessage(){	
+     		var receiver = $(".direct-chat-messages:visible").attr("id").replace("chat-","");
      		console.log("sender:${sessionScope.username}");
-     		console.log("receiver:" + $('div[id^="chat"][active=true]').attr("id").replace("chat-",""));
+     		console.log("receiver:" + receiver);
          	var message=$('#sendMessageTextArea').val();
+     		if($.trim(message) == ''){
+     			alert("请先输入内容再发送！");
+     			return false;
+     		}
          	$.ajax({
     			type: 'post',
     			url:'<%=basePath%>/activemq/queueSender',
     			dataType:'text', 
-    			data:{"message":message, "sender":'${sessionScope.username}', "receiver":$('#activeUser').val()},
+    			data:{"message":message, "sender":'${sessionScope.username}', "receiver":receiver},
     			success:function(data){
     				if(data=="suc"){
     					$("#status").html("<font color=green>发送成功</font>");
@@ -1106,6 +1153,30 @@
      		//添加空格[&nbsp;]占用一行
     		$("#status").html("&nbsp;");
     	}
+     	
+     	//切换聊天窗口方法
+     	function switchMessageTab(username, realname){
+     		$('#chat-' + username).show();
+     		$(".direct-chat-messages:not('#chat-" + username + "')").hide();
+     		$("#receiverName").text("与" + realname + "交谈中......");
+     		//清除未读信息数并隐藏提示
+     		var unreadCount = parseInt($("#li-" + username).find(".badge").text());
+     		$("#li-" + username).find(".badge").text(0).hide();
+     		var totalUnreadCount = parseInt($("#totalUnreadCount").text());
+     		var resultCount = totalUnreadCount - unreadCount;
+     		$("#totalUnreadCount").text(resultCount);
+     		if(resultCount == 0){
+     			$("#totalUnreadCount").hide();
+     		}
+     		//滚轴拉到底部
+     		$("#chat-" + username).scrollTop($("#chat-" + username)[0].scrollHeight);
+     	}
+     	//当前窗口是否活跃窗口
+     	function isActiveTab(tabId){
+     		var activeId = $(".direct-chat-messages:visible").attr("id");
+     		console.log(tabId + "---" + activeId);
+     		return tabId == activeId;
+     	}
    </script>
 </body>
 </html>
