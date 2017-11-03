@@ -1,36 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-    String path = request.getContextPath();
-			String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-					+ path + "/";
-			String resourcePath = basePath + "static/login/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+	String resourcePath = basePath + "static/login/";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script type="text/javascript">
-    //检查浏览器版本
-    var Sys = {};
-    var ua = navigator.userAgent.toLowerCase();
-    var s;
-    (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
-         (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
-        (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
-        (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
-         (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+	//检查浏览器版本
+	var Sys = {};
+	var ua = navigator.userAgent.toLowerCase();
+	var s;
+	(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] : (s = ua
+			.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] : (s = ua
+			.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] : (s = ua
+			.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] : (s = ua
+			.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
 
-    //低于IE9以下进行跳转
-    if (Sys.ie < 9) {
-        //window.location.href = "sorry-for-ie.htm";
-    }
+	//低于IE9以下进行跳转
+	if (Sys.ie < 9) {
+		//window.location.href = "sorry-for-ie.htm";
+	}
 </script>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <%
-    response.setHeader("Pragma", "No-cache");
-			response.setHeader("Cache-Control", "no-cache");
-			response.setDateHeader("Expires", 0);
-			response.flushBuffer();
+	response.setHeader("Pragma", "No-cache");
+	response.setHeader("Cache-Control", "no-cache");
+	response.setDateHeader("Expires", 0);
+	response.flushBuffer();
 %>
 <!-- page title -->
 <title>XXXXX专业服务系统</title>
@@ -87,7 +87,7 @@
 			</div>
 			<label class="checkbox inline password"> <input
 				type="checkbox" tabindex="2" name="RemeberMe" id="RemeberMe"
-				value="true" /> <label for="forgetpassword">记住用户名<em>·</em><a
+				/> <label for="forgetpassword">记住用户名<em>·</em><a
 					href="#" id="ForgetPassword" tabindex="4">忘记密码?</a></label>
 			</label>
 			<div class="clearfix"></div>
@@ -165,20 +165,49 @@
 	<script src="<%=resourcePath%>js/jquery.bgswitcher.min.js"
 		type="text/javascript"></script>
 	<script type="text/javascript">
-        $(document).ready(login.pageload);
-        var ua = navigator.userAgent.toLowerCase();
-        if ((/iphone|ipad|ipod/.test(ua)) || (/android/.test(ua)))
-            $("#gotomobiledownload").show();
-        else $("#gotomobiledownload").hide(); 
-    </script>
+		$(document).ready(login.pageload);
+		var ua = navigator.userAgent.toLowerCase();
+		if ((/iphone|ipad|ipod/.test(ua)) || (/android/.test(ua)))
+			$("#gotomobiledownload").show();
+		else
+			$("#gotomobiledownload").hide();
+	</script>
 	<script type="text/javascript">
-       document.onkeydown = function(event){
-             var e = event || window.event || arguments.callee.caller.arguments[0];            
-              if(e && e.keyCode==13){ // enter 键
-                  //回车键提交登录
-                  loginValiDate();
-             }
-         }; 
- </script>
+		document.onkeydown = function(event) {
+			var e = event || window.event
+					|| arguments.callee.caller.arguments[0];
+			if (e && e.keyCode == 13) { // enter 键
+				//回车键提交登录
+				loginValiDate();
+			}
+		};
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//记住密码功能
+			var str = getCookie("loginInfo");
+			str = str.substring(1, str.length - 1);
+			var username = str.split(",")[0];
+			var password = str.split(",")[1];
+			//自动填充用户名和密码
+			$("#emp_DomainName").val(username);
+			$("#emp_Password").val(password);
+			$("#RemeberMe").prop("checked", true);
+		});
+
+		//获取cookie
+		function getCookie(cname) {
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ')
+					c = c.substring(1);
+				if (c.indexOf(name) != -1)
+					return c.substring(name.length, c.length);
+			}
+			return "";
+		}
+	</script>
 </body>
 </html>

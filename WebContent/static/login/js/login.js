@@ -206,6 +206,8 @@ function loginValiDate(){
 	 var emp_DomainName = $("#emp_DomainName").val();
 	 //登录密码
 	 var emp_Password = $("#emp_Password").val();
+	 //是否记住密码
+	 var remFlag = $("#RemeberMe").is(':checked');
 	 $(".error").removeClass("error");
 	 //获取文本框对象
      var $DomainName = $("#DomainName input");
@@ -238,7 +240,7 @@ function loginValiDate(){
     	    $.ajax({
     	        type: "post",
     	        url: url,
-    	        data: {"emp_DomainName":emp_DomainName,"emp_Password":emp_Password},
+    	        data: {"emp_DomainName":emp_DomainName,"emp_Password":emp_Password,"remFlag":remFlag},
     	        cache: false,
     	        async : false,
     	        dataType: "json",

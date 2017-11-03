@@ -970,213 +970,212 @@
 <script src="<%=commonPath%>dist/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<%=commonPath%>dist/js/demo.js"></script>
+<script type="text/javascript">
+   var loginer = '${sessionScope.username}';
+   $(function(){
+ 	  initSocket();//初始化websocket
+   });
+   
+   function initSocket() {
+ 		var webSocket = null;
+ 	    window.onbeforeunload = function () {
+ 	        //离开页面时的其他操作
+ 	    };
 
-   <script type="text/javascript">
-      $(function(){
-    	  initSocket();//初始化websocket
-      });
-      function initSocket() {
-    	  
-    		var webSocket = null;
-    	    window.onbeforeunload = function () {
-    	        //离开页面时的其他操作
-    	    };
+ 	    if (!window.WebSocket) {
+ 	        console("您的浏览器不支持websocket！");
+ 	        return false;
+ 	    }
 
-    	    if (!window.WebSocket) {
-    	        console("您的浏览器不支持websocket！");
-    	        return false;
-    	    }
-
-    	    var target = 'ws://' + window.location.host + "/IACCNUTIL/websocket/${sessionScope.username}";  
-    			  
-   			if ('WebSocket' in window) {  
-   				webSocket = new WebSocket(target);  
-   			} else if ('MozWebSocket' in window) {  
-   				webSocket = new MozWebSocket(target);  
-   			} else {  
-   			    alert('WebSocket is not supported by this browser.');  
-   			    return;  
-   			}  
-    	    
-    	    // 收到服务端消息
-    	    webSocket.onmessage = function (event) {
-				//处理消息start
-				if(event!=null){
-         			//将json字符串转为对象
-         			var msg = eval('(' + event.data + ')'); 
+ 	    var target = 'ws://' + window.location.host + "/IACCNUTIL/websocket/" + loginer;  
+ 			  
+			if ('WebSocket' in window) {  
+				webSocket = new WebSocket(target);  
+			} else if ('MozWebSocket' in window) {  
+				webSocket = new MozWebSocket(target);  
+			} else {  
+			    alert('WebSocket is not supported by this browser.');  
+			    return;  
+			}  
+ 	    
+ 	    // 收到服务端消息
+ 	    webSocket.onmessage = function (event) {
+	//处理消息start
+	if(event!=null){
+      			//将json字符串转为对象
+      			var msg = eval('(' + event.data + ')'); 
+	}
+	
+	console.log("msg:" + event.data); 
+	
+		if(msg.username == loginer){
+			//会话DIV
+			var chatMsgDiv = $("#chat-" + msg.receiver);
+			//本人的信息靠右显示
+			var msgRow = '';
+		    msgRow += '<div class="direct-chat-msg right">';
+		    msgRow += '<div class="direct-chat-info clearfix">';
+		    msgRow += '<span class="direct-chat-name pull-right">' + msg.realname + '</span>';
+		    msgRow += '<span class="direct-chat-timestamp pull-left">' + msg.sendTime + '</span></div>';
+		    msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
+		    msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
+		 	//滚轴拉到底部
+		    chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
+			//时间
+			$("#li-" + msg.receiver).find(".contacts-list-date").text(msg.sendTime);
+			//信息
+			$("#li-" + msg.receiver).find(".contacts-list-msg").text(msg.message);
+				//如果与窗口(chat_window)没有激活，生成最新信息(chat_window.latestInfo)并使未读信息数(chat_window.noReadCount)+1
+				if(!isActiveTab("chat-" + msg.receiver)){
+					//窗口未读数
+			$("#li-" + msg.receiver).find(".badge")
+									.text(parseInt($("#li-" + msg.receiver).find(".badge").text()) + 1);
+			$("#li-" + msg.receiver).find(".badge").show();
+					//总未读数
+					$("#totalUnreadCount").text(parseInt($("#totalUnreadCount").text()) + 1);
+					$("#totalUnreadCount").attr("title", (parseInt($("#totalUnreadCount").text()) + 1) + " New Messages");
+					$("#totalUnreadCount").show();
 				}
-				
-				console.log("msg:" + event.data); 
-				
- 				if(msg.username == '${sessionScope.username}'){
- 					//会话DIV
- 					var chatMsgDiv = $("#chat-" + msg.receiver);
- 					//本人的信息靠右显示
- 					var msgRow = '';
- 				    msgRow += '<div class="direct-chat-msg right">';
- 				    msgRow += '<div class="direct-chat-info clearfix">';
- 				    msgRow += '<span class="direct-chat-name pull-right">' + msg.realname + '</span>';
- 				    msgRow += '<span class="direct-chat-timestamp pull-left">' + msg.sendTime + '</span></div>';
- 				    msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
- 				    msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
- 				 	//滚轴拉到底部
- 				    chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
- 					//时间
- 					$("#li-" + msg.receiver).find(".contacts-list-date").text(msg.sendTime);
- 					//信息
- 					$("#li-" + msg.receiver).find(".contacts-list-msg").text(msg.message);
- 	 				//如果与窗口(chat_window)没有激活，生成最新信息(chat_window.latestInfo)并使未读信息数(chat_window.noReadCount)+1
- 	 				if(!isActiveTab("chat-" + msg.receiver)){
- 	 					//窗口未读数
-						$("#li-" + msg.receiver).find(".badge").show();
- 	 					var unReadCount = parseInt($("#li-" + msg.receiver).find(".badge").text());
- 	 					$("#li-" + msg.receiver).find(".badge").text(unReadCount + 1);
- 	 					//总未读数
- 	 					$("#totalUnreadCount").show();
- 	 					var totalUnreadCount = parseInt($("#totalUnreadCount").text());
- 	 					$("#totalUnreadCount").text(totalUnreadCount + 1).attr("title", (totalUnreadCount + 1) + " New Messages");
- 	 				}
- 				}else if(msg.receiver == '${sessionScope.username}'){
- 					//会话DIV
- 					var chatMsgDiv = $("#chat-" + msg.username);
- 					//他人的信息靠左显示
- 					var msgRow = '';
- 					msgRow += '<div class="direct-chat-msg">';
- 					msgRow += '<div class="direct-chat-info clearfix">';
- 					msgRow += '<span class="direct-chat-name pull-left">' + msg.realname + '</span>';
- 					msgRow += '<span class="direct-chat-timestamp pull-right">' + msg.sendTime + '</span></div>';
- 					msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
- 					msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
- 					//滚轴拉到底部(此处scrollTop(chatMsgDiv[0].scrollHeight)无效，因是隐藏元素)
- 					//chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
- 					chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
- 					//时间
- 					$("#li-" + msg.username).find(".contacts-list-date").text(msg.sendTime);
- 					//信息
- 					$("#li-" + msg.username).find(".contacts-list-msg").text(msg.message);
- 	 				//如果与窗口(chat_window)没有激活，生成最新信息(chat_window.latestInfo)并使未读信息数(chat_window.noReadCount)+1
- 	 				if(!isActiveTab("chat-" + msg.username)){
-						//窗口未读数
-						$("#li-" + msg.username).find(".badge").show();
- 	 					var unReadCount = parseInt($("#li-" + msg.username).find(".badge").text());
- 	 					$("#li-" + msg.username).find(".badge").text(unReadCount + 1);
- 	 					//总未读数
- 	 					$("#totalUnreadCount").show();
- 	 					var totalUnreadCount = parseInt($("#totalUnreadCount").text());
- 	 					$("#totalUnreadCount").text(totalUnreadCount + 1).attr("title", (totalUnreadCount + 1) + " New Messages");
- 	 				}
+		}else if(msg.receiver == loginer){
+			//会话DIV
+			var chatMsgDiv = $("#chat-" + msg.username);
+			//他人的信息靠左显示
+			var msgRow = '';
+			msgRow += '<div class="direct-chat-msg">';
+			msgRow += '<div class="direct-chat-info clearfix">';
+			msgRow += '<span class="direct-chat-name pull-left">' + msg.realname + '</span>';
+			msgRow += '<span class="direct-chat-timestamp pull-right">' + msg.sendTime + '</span></div>';
+			msgRow += '<img class="direct-chat-img" src="<%=commonPath%>' + msg.imgUrl + '" alt="message user image">';
+			msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
+			//滚轴拉到底部
+			chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
+			//时间
+			$("#li-" + msg.username).find(".contacts-list-date").text(msg.sendTime);
+			//信息
+			$("#li-" + msg.username).find(".contacts-list-msg").text(msg.message);
+				//如果与窗口(chat_window)没有激活，生成最新信息(chat_window.latestInfo)并使未读信息数(chat_window.noReadCount)+1
+				if(!isActiveTab("chat-" + msg.username)){
+			//窗口未读数
+			$("#li-" + msg.username).find(".badge")
+									.text(parseInt($("#li-" + msg.username).find(".badge").text()) + 1);
+			$("#li-" + msg.username).find(".badge").show();
+					//总未读数
+					$("#totalUnreadCount").text(parseInt($("#totalUnreadCount").text()) + 1);
+					$("#totalUnreadCount").attr("title", (parseInt($("#totalUnreadCount").text()) + 1) + " New Messages");
+					$("#totalUnreadCount").show();
+				}
+		}else{
+			alert("消息推送错误，发送者和接收者都不是本人！");
+		}
+		
+            //处理消息end
+ 	        // 关闭连接
+ 	        webSocket.onclose();
+ 	    };
+ 	    // 异常
+ 	    webSocket.onerror = function (event) {
+ 	        console.log(event);
+ 	    };
+ 	    // 建立连接
+ 	    webSocket.onopen = function (event) {
+ 	       console.log(event);
+ 	       console.log(webSocket);
+ 	    };
+ 	    // 断线
+ 	    webSocket.onclose = function () {
+ 	        console.log("websocket断开连接");
+ 	    };
+ 	}
+   
+  	function sendMessage2(){
+      	var message=$('#sendMessageTextArea').val();
+  		if($.trim(message) == ''){
+  			alert("请先输入内容再发送！");
+  			return false;
+  		}
+      	$.ajax({
+ 			type: 'post',
+ 			url:'<%=basePath%>/activemq/topicSender',
+ 			dataType:'text', 
+ 			data:{"message":message},
+ 			success:function(data){
+ 				if(data=="suc"){
+ 					$("#status").html("<font color=green>发送成功</font>");
+ 					setTimeout(clear,1000);
  				}else{
- 					alert("消息推送错误，发送者和接收者都不是本人！");
+ 					$("#status").html("<font color=red>"+data+"</font>");
+ 					setTimeout(clear,5000);
  				}
- 				
-  	            //处理消息end
-    	        // 关闭连接
-    	        webSocket.onclose();
-    	    };
-    	    // 异常
-    	    webSocket.onerror = function (event) {
-    	        console.log(event);
-    	    };
-    	    // 建立连接
-    	    webSocket.onopen = function (event) {
-    	       console.log(event);
-    	       console.log(webSocket);
-    	    };
-    	    // 断线
-    	    webSocket.onclose = function () {
-    	        console.log("websocket断开连接");
-    	    };
-    	}
-      
-     	function sendMessage2(){
-         	var message=$('#sendMessageTextArea').val();
-     		if($.trim(message) == ''){
-     			alert("请先输入内容再发送！");
-     			return false;
-     		}
-         	$.ajax({
-    			type: 'post',
-    			url:'<%=basePath%>/activemq/topicSender',
-    			dataType:'text', 
-    			data:{"message":message},
-    			success:function(data){
-    				if(data=="suc"){
-    					$("#status").html("<font color=green>发送成功</font>");
-    					setTimeout(clear,1000);
-    				}else{
-    					$("#status").html("<font color=red>"+data+"</font>");
-    					setTimeout(clear,5000);
-    				}
-    			},
-    			error:function(data){
-    				$("#status").html("<font color=red>ERROR:"+data["status"]+","+data["statusText"]+"</font>");
-    				setTimeout(clear,5000);
-    			}
-    			
-    		});
-         	$('#sendMessageTextArea').val("");
-     	}
-     	
-     	function sendMessage(){	
-     		var receiver = $(".direct-chat-messages:visible").attr("id").replace("chat-","");
-     		console.log("sender:${sessionScope.username}");
-     		console.log("receiver:" + receiver);
-         	var message=$('#sendMessageTextArea').val();
-     		if($.trim(message) == ''){
-     			alert("请先输入内容再发送！");
-     			return false;
-     		}
-         	$.ajax({
-    			type: 'post',
-    			url:'<%=basePath%>/activemq/queueSender',
-    			dataType:'text', 
-    			data:{"message":message, "sender":'${sessionScope.username}', "receiver":receiver},
-    			success:function(data){
-    				if(data=="suc"){
-    					$("#status").html("<font color=green>发送成功</font>");
-    					setTimeout(clear,1000);
-    				}else{
-    					$("#status").html("<font color=red>"+data+"</font>");
-    					setTimeout(clear,5000);
-    				}
-    			},
-    			error:function(data){
-    				$("#status").html("<font color=red>ERROR:"+data["status"]+","+data["statusText"]+"</font>");
-    				setTimeout(clear,5000);
-    			}
-    			
-    		});
-         	$('#sendMessageTextArea').val("");
-     	}
-     	
-     	function clear(){
-     		//添加空格[&nbsp;]占用一行
-    		$("#status").html("&nbsp;");
-    	}
-     	
-     	//切换聊天窗口方法
-     	function switchMessageTab(username, realname){
-     		$('#chat-' + username).show();
-     		$(".direct-chat-messages:not('#chat-" + username + "')").hide();
-     		$("#receiverName").text("与" + realname + "交谈中......");
-     		//清除未读信息数并隐藏提示
-     		var unreadCount = parseInt($("#li-" + username).find(".badge").text());
-     		$("#li-" + username).find(".badge").text(0).hide();
-     		var totalUnreadCount = parseInt($("#totalUnreadCount").text());
-     		var resultCount = totalUnreadCount - unreadCount;
-     		$("#totalUnreadCount").text(resultCount);
-     		if(resultCount == 0){
-     			$("#totalUnreadCount").hide();
-     		}
-     		//滚轴拉到底部
-     		$("#chat-" + username).scrollTop($("#chat-" + username)[0].scrollHeight);
-     	}
-     	//当前窗口是否活跃窗口
-     	function isActiveTab(tabId){
-     		var activeId = $(".direct-chat-messages:visible").attr("id");
-     		console.log(tabId + "---" + activeId);
-     		return tabId == activeId;
-     	}
-   </script>
+ 			},
+ 			error:function(data){
+ 				$("#status").html("<font color=red>ERROR:"+data["status"]+","+data["statusText"]+"</font>");
+ 				setTimeout(clear,5000);
+ 			}
+ 			
+ 		});
+      	$('#sendMessageTextArea').val("");
+  	}
+  	
+  	function sendMessage(){	
+  		var receiver = $(".direct-chat-messages:visible").attr("id").replace("chat-","");
+  		console.log("sender:" + loginer);
+  		console.log("receiver:" + receiver);
+      	var message=$('#sendMessageTextArea').val();
+  		if($.trim(message) == ''){
+  			alert("请先输入内容再发送！");
+  			return false;
+  		}
+      	$.ajax({
+ 			type: 'post',
+ 			url:'<%=basePath%>/activemq/queueSender',
+ 			dataType:'text', 
+ 			data:{"message":message, "sender":loginer, "receiver":receiver},
+ 			success:function(data){
+ 				if(data=="suc"){
+ 					$("#status").html("<font color=green>发送成功</font>");
+ 					setTimeout(clear,1000);
+ 				}else{
+ 					$("#status").html("<font color=red>"+data+"</font>");
+ 					setTimeout(clear,5000);
+ 				}
+ 			},
+ 			error:function(data){
+ 				$("#status").html("<font color=red>ERROR:"+data["status"]+","+data["statusText"]+"</font>");
+ 				setTimeout(clear,5000);
+ 			}
+ 			
+ 		});
+      	$('#sendMessageTextArea').val("");
+  	}
+  	
+  	function clear(){
+  		//添加空格[&nbsp;]占用一行
+ 		$("#status").html("&nbsp;");
+ 	}
+  	
+  	//切换聊天窗口方法
+  	function switchMessageTab(username, realname){
+  		$('#chat-' + username).show();
+  		$(".direct-chat-messages:not('#chat-" + username + "')").hide();
+  		$("#receiverName").text("与" + realname + "交谈中......");
+  		//清除未读信息数并隐藏提示
+  		var unreadCount = parseInt($("#li-" + username).find(".badge").text());
+  		$("#li-" + username).find(".badge").text(0).hide();
+  		var totalUnreadCount = parseInt($("#totalUnreadCount").text());
+  		var resultCount = totalUnreadCount - unreadCount;
+  		$("#totalUnreadCount").text(resultCount);
+  		if(resultCount == 0){
+  			$("#totalUnreadCount").hide();
+  		}
+  		//滚轴拉到底部
+  		$("#chat-" + username).scrollTop($("#chat-" + username)[0].scrollHeight);
+  	}
+  	//当前窗口是否活跃窗口
+  	function isActiveTab(tabId){
+  		var activeId = $(".direct-chat-messages:visible").attr("id");
+  		console.log(tabId + "---" + activeId);
+  		return tabId == activeId;
+  	}
+</script>
 </body>
 </html>

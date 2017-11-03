@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -126,6 +127,22 @@ public class LoginController extends BaseController
                 logger.info("userList:" + userList);
                 
                 logger.info("用户<" + user.getRealname() +">登录系统了......");
+                
+                //记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
+                String remFlag = request.getParameter("remFlag");
+                if("true".equals(remFlag)){ //"1"表示用户勾选记住密码
+/*                	Cookie[] cookies = request.getCookies();
+                	Stream<Cookie> stream = Stream.of(cookies);
+                	if(stream.anyMatch(c -> "loginInfo".equals(c.getName()))) {
+                		resultJson ="0000";
+                	}*/
+                    String loginInfo = emp_DomainName + "," + emp_Password;
+                    Cookie userCookie = new Cookie("loginInfo",loginInfo); 
+                    userCookie.setMaxAge(30*24*60*60);   //存活期为一个月 30*24*60*60
+                    userCookie.setPath("/");
+                    response.addCookie(userCookie); 
+                }
+                
                 resultJson ="0000";
             }
             else
