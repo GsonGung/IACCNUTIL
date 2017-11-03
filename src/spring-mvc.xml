@@ -49,7 +49,16 @@
             <bean class="com.demo.interceptors.DoFilterInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+    <!--步骤三： 自定义SpringMVC的Session拦截器 -->
+    <mvc:interceptors >     
+        <mvc:interceptor>     
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/login/**"/>
+            <bean class="com.demo.interceptors.SessionInterceptor"></bean>     
+        </mvc:interceptor>     
+    </mvc:interceptors> 
     <!-- 自定义拦截器  结束 -->
+    <!-- interceptors --> 
     
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
         <!-- 设置 默认语言为中文 -->
