@@ -30,4 +30,6 @@ public interface UserDao
     User selectByAccount(@Param("username") String username, @Param("password") String password);
 
     List<User> findUsers();
+    
+    List<User> findOtherUsers(String username);
 }

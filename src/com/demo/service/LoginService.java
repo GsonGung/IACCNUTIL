@@ -43,4 +43,14 @@ public interface LoginService
      * @see [类、类#方法、类#成员]
      */
     List<User> queryUserList();
+
+    /**
+     * 
+     * <查询除当前之外的其他用户列表>
+     * <功能详细描述>
+     * @param username
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    List<User> queryExcludeUserList(String username);
 }

@@ -23,4 +23,10 @@
         <include refid="Base_Column_List"/>
         FROM IACCN_USER_INFO U
     </select>
+    <select id="findOtherUsers" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM IACCN_USER_INFO U
+        WHERE U.USERNAME  &lt;> #{username}
+    </select>
 </mapper>

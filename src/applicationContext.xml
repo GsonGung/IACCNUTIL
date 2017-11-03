@@ -91,9 +91,9 @@
 	<!-- jmsTemplate 消息生产者   end-->	
 	<!-- 消息消费者 start-->
 	<!-- 定义queue监听器 -->
-<!--  	<jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
+  	<jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
 		<jms:listener destination="websocket.queue" ref="queueListener"/>
-	</jms:listener-container> -->
+	</jms:listener-container>
 	<!-- 定义topic监听器 -->
 	<jms:listener-container destination-type="topic" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
 		<jms:listener destination="websocket.topic" ref="topicListener"/>

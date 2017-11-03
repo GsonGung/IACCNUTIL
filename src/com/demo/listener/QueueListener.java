@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSONObject;
 import com.demo.controller.WebsocketController;
 
 @Component("queueListener")
@@ -22,7 +23,10 @@ public class QueueListener implements MessageListener
         TextMessage textMessage = (TextMessage) message;
         try {
         	 String jsonStr = textMessage.getText();
-        	 WebsocketController.broadcast(jsonStr);
+        	 JSONObject jsonObj = JSONObject.parseObject(jsonStr);
+        	 String receiver = jsonObj.getString("receiver");
+        	 String username = jsonObj.getString("username");
+        	 WebsocketController.broadcast(jsonStr, username, receiver);
 		} catch (JMSException e) {
 			 logger.error("[QueueListener.onMessage]:receive message occured an exception",e);
 		}

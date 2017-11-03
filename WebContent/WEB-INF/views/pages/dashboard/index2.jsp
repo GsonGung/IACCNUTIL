@@ -336,20 +336,20 @@
                     <ul class="contacts-list">
 						<!-- 此处替换为用户列表 -->
   						<c:forEach items="${userList}" var="user" varStatus="stat">
-						    <li id="li-${user.username}">
-		                        <a onclick="javascript:switchMessageTab('${user.username}','${user.realname}');" data-widget="chat-pane-toggle" data-toggle="tooltip">
-		                          <img class="contacts-list-img" src="<%=commonPath%>${user.imgUrl}" alt="User Image">
-		                          <div class="contacts-list-info">
-		                            <span class="contacts-list-name">
-		                              ${user.realname}
-		                              <small class="contacts-list-date pull-right"></small>
-		                            </span>
-		                            <span class="contacts-list-msg"></span>
-		                            <span class="badge bg-yellow pull-right" style="display:none;">0</span>
-		                          </div>
+  								<li id="li-${user.username}">
+		                        	<a onclick="javascript:switchMessageTab('${user.username}','${user.realname}');" data-widget="chat-pane-toggle" data-toggle="tooltip">
+		                          		<img class="contacts-list-img" src="<%=commonPath%>${user.imgUrl}" alt="User Image">
+		                          		<div class="contacts-list-info">
+			                            	<span class="contacts-list-name">
+			                              		${user.realname}
+			                              		<small class="contacts-list-date pull-right"></small>
+			                            	</span>
+		                            		<span class="contacts-list-msg"></span>
+		                            		<span class="badge bg-yellow pull-right" style="display:none;">0</span>
+		                          		</div>
 		                          <!-- /.contacts-list-info -->
-		                        </a>
-                      		</li>
+		                        	</a>
+                      			</li>
 						</c:forEach>
                     </ul>
                     <!-- /.contatcts-list -->
@@ -1049,7 +1049,7 @@
  					msgRow += '<div class="direct-chat-text">' + msg.message + '</div></div>';
  					//滚轴拉到底部(此处scrollTop(chatMsgDiv[0].scrollHeight)无效，因是隐藏元素)
  					//chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
- 					chatMsgDiv.append(msgRow);
+ 					chatMsgDiv.append(msgRow).scrollTop(chatMsgDiv[0].scrollHeight);
  					//时间
  					$("#li-" + msg.username).find(".contacts-list-date").text(msg.sendTime);
  					//信息

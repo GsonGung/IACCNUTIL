@@ -121,7 +121,7 @@ public class LoginController extends BaseController
                 session.setAttribute("realname", user.getRealname());
                 session.setAttribute("imgUrl", user.getImgUrl());
                 
-                List<User> userList = loginService.queryUserList();
+                List<User> userList = loginService.queryExcludeUserList(emp_DomainName);
                 session.setAttribute("userList", userList);
                 logger.info("userList:" + userList);
                 

@@ -45,5 +45,10 @@ public class LoginServiceImpl implements LoginService
     {
         return userDao.findUsers();
     }
-
+    
+    @Override
+    public List<User> queryExcludeUserList(String username){
+        return userDao.findOtherUsers(username);
+    }
+    
 }
