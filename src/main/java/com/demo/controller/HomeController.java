@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.demo.dao.UserDao;
 import com.demo.pojo.Menu;
 import com.demo.service.IHomeService;
 
@@ -614,4 +615,17 @@ public class HomeController extends BaseController
     {
         return "/pages/examples/pace";
     }*/
+    
+    /**
+     * 
+     * <toRoleConfig>
+     * <功能详细描述>
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("toRoleConfig")
+    public String toRoleConfig()
+    {
+        return "/pages/role/list";
+    }
 }
