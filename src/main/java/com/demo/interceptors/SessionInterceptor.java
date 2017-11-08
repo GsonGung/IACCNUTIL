@@ -18,6 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.demo.pojo.User;
+
 /**
  * <Session拦截器，使Session失效时返回登录页面>
  * <功能详细描述>
@@ -37,8 +39,8 @@ public class SessionInterceptor extends HandlerInterceptorAdapter
     {
         String path = hsr.getContextPath();
         String basePath = hsr.getScheme() + "://" + hsr.getServerName() + ":" + hsr.getServerPort() + path + "/";
-        String username = (String)hsr.getSession().getAttribute("username");
-        if (username == null)
+        User user = (User)hsr.getSession().getAttribute("user");
+        if (user == null)
         {
             log.info("用户未登录或登录超时，将返回登录页面:" + basePath + "login/toLogin");
             hsr1.sendRedirect(basePath + "login/toLogin");

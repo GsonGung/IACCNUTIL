@@ -971,7 +971,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<%=commonPath%>dist/js/demo.js"></script>
 <script type="text/javascript">
-   var loginer = '${sessionScope.username}';
+   var loginer = '${sessionScope.user.username}';
    $(function(){
  	  initSocket();//初始化websocket
    });

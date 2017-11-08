@@ -186,6 +186,10 @@
 		$(document).ready(function() {
 			//记住密码功能
 			var str = getCookie("loginInfo");
+			if($.trim(str) == ''){
+				$("#RemeberMe").prop("checked", false);
+				return;
+			}
 			str = str.substring(1, str.length - 1);
 			var username = str.split(",")[0];
 			var password = str.split(",")[1];

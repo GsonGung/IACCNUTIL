@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +10,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +78,6 @@ public class LoginController extends BaseController
         return "/pages/login/index2";
     }
     
-    
     /**
      * 
      * <退出登录>
@@ -82,8 +86,9 @@ public class LoginController extends BaseController
      * @see [类、类#方法、类#成员]
      */
     @RequestMapping("outToLogin")
-    public String outToLogin()
+    public String outToLogin(HttpSession session)
     {
+        session.getAttribute("user");
         return "/pages/login/index";
     }
     
@@ -100,68 +105,100 @@ public class LoginController extends BaseController
     @RequestMapping(value = "/loginValidate")
     public String loginValidate(HttpServletRequest request, HttpServletResponse response, HttpSession session)
     {
-        String resultJson="";
-
+        String resultJson = "";
+        String emp_DomainName = request.getParameter("emp_DomainName");
+        String emp_Password = request.getParameter("emp_Password");
+        //记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
+        String remFlag = request.getParameter("remFlag");
+        System.out.println(emp_DomainName + "=" + emp_Password + "=" + remFlag);
+        
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(emp_DomainName, emp_Password);
+        
         try
         {
-            //boolean isAjax = CustomWebUtils.isAjax(request);
-            
-            String emp_DomainName = request.getParameter("emp_DomainName");
-            String emp_Password = request.getParameter("emp_Password");
-            
-            System.out.println(emp_DomainName + "=" + emp_Password);
+            //登录验证
+            subject.login(token);
             //查询数据库验证
             User user = loginService.queryUserByAccount(emp_DomainName, emp_Password);
+            //用户账号添加到Session
+            session.setAttribute("user", user);
             
-            System.out.println(emp_DomainName + "=" + emp_Password);
+            List<User> userList = loginService.queryExcludeUserList(emp_DomainName);
+            session.setAttribute("userList", userList);
+            logger.info("userList:" + userList);
             
-            if (user != null)
+            logger.info("用户<" + user.getRealname() + ">登录系统了......");
+
+            if ("true".equals(remFlag))
             {
-                //用户账号添加到Session
-                session.setAttribute("username", user.getUsername());
-                session.setAttribute("realname", user.getRealname());
-                session.setAttribute("imgUrl", user.getImgUrl());
-                
-                List<User> userList = loginService.queryExcludeUserList(emp_DomainName);
-                session.setAttribute("userList", userList);
-                logger.info("userList:" + userList);
-                
-                logger.info("用户<" + user.getRealname() +">登录系统了......");
-                
-                //记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
-                String remFlag = request.getParameter("remFlag");
-                if("true".equals(remFlag)){ //"1"表示用户勾选记住密码
-/*                	Cookie[] cookies = request.getCookies();
-                	Stream<Cookie> stream = Stream.of(cookies);
-                	if(stream.anyMatch(c -> "loginInfo".equals(c.getName()))) {
-                		resultJson ="0000";
-                	}*/
-                    String loginInfo = emp_DomainName + "," + emp_Password;
-                    Cookie userCookie = new Cookie("loginInfo",loginInfo); 
-                    userCookie.setMaxAge(30*24*60*60);   //存活期为一个月 30*24*60*60
-                    userCookie.setPath("/");
-                    response.addCookie(userCookie); 
+                //如果cookie已存在直接登录成功
+                Cookie[] cookies = request.getCookies();
+                Stream<Cookie> stream = Stream.of(cookies);
+                if(stream.anyMatch(c -> "loginInfo".equals(c.getName()))) {
+                    resultJson ="0000";
                 }
-                
-                resultJson ="0000";
+                String loginInfo = emp_DomainName + "," + emp_Password;
+                Cookie userCookie = new Cookie("loginInfo", loginInfo);
+                userCookie.setMaxAge(30 * 24 * 60 * 60); //存活期为一个月 30*24*60*60
+                userCookie.setPath("/");
+                response.addCookie(userCookie);
+            }else {
+                //未选中就清除对应cookie
+                Cookie[] cookies = request.getCookies();
+                Stream<Cookie> stream = Stream.of(cookies);
+                stream.forEach(c -> {
+                    if("loginInfo".equals(c.getName())) {
+                        c.setMaxAge(0);
+                    }
+                });
             }
-            else
-            {
-                //response.setContentType(Constant.AJAX_CONTEXTTYPE);
-                // response.getWriter().write(Message.fail("用户名或密码错误，请检查").toJson());
-                //request.setAttribute("missInfo", "yonhum");
-               // return "redirect:../login/toLogin.do";
-                resultJson = "0001";
-            }
+            
+            resultJson ="0000";
+        }
+        catch (UnknownAccountException uae)
+        {
+            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,未知账户");
+            request.setAttribute("message_login", "未知账户");
+        }
+        catch (IncorrectCredentialsException ice)
+        {
+            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,错误的凭证");
+            request.setAttribute("message_login", "密码不正确");
+        }
+        catch (LockedAccountException lae)
+        {
+            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,账户已锁定");
+            request.setAttribute("message_login", "账户已锁定");
+        }
+        catch (ExcessiveAttemptsException eae)
+        {
+            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,错误次数过多");
+            request.setAttribute("message_login", "用户名或密码错误次数过多");
+        }
+        catch (AuthenticationException ae)
+        {
+            //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
+            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,堆栈轨迹如下");
+            ae.printStackTrace();
+            request.setAttribute("message_login", "用户名或密码不正确");
         }
         catch (Exception e)
         {
-            resultJson="0003";
+            resultJson = "0003";
             logger.error("login error", e);
             e.printStackTrace();
         }
+        
+        //验证是否登录成功  
+        if(subject.isAuthenticated()){  
+            System.out.println("用户[" + emp_DomainName + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");  
+        }else{  
+            token.clear();  
+        }  
+        
         return resultJson;
-       // return "redirect:../home/toHome.do";
+        // return "redirect:../home/toHome.do";
     }
     
     /**
