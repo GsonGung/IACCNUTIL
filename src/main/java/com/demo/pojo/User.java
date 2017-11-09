@@ -1,6 +1,7 @@
 package com.demo.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -30,10 +31,23 @@ public class User implements Serializable {
     
     private Boolean locked = Boolean.FALSE;
     
-    public User() {}
+    private String isDelete;
     
+    private String isValid;
+    
+    private Date createTime;
+    
+    private String createBy;
+    
+    private Date updateTime;
+    
+    private String uodateBy;
+    
+    public User() {}
+
     public User(int id, Long organizationId, String username, String realname, String password, String salt,
-        String gender, String imgUrl, List<Long> roleIds, Boolean locked)
+        String gender, String imgUrl, List<Long> roleIds, Boolean locked, String isDelete, String isValid,
+        Date createTime, String createBy, Date updateTime, String uodateBy)
     {
         super();
         this.id = id;
@@ -46,9 +60,13 @@ public class User implements Serializable {
         this.imgUrl = imgUrl;
         this.roleIds = roleIds;
         this.locked = locked;
+        this.isDelete = isDelete;
+        this.isValid = isValid;
+        this.createTime = createTime;
+        this.createBy = createBy;
+        this.updateTime = updateTime;
+        this.uodateBy = uodateBy;
     }
-
-
 
     public int getId()
     {
@@ -178,13 +196,80 @@ public class User implements Serializable {
     {
         this.locked = locked;
     }
+    
+    public String getIsDelete()
+    {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete)
+    {
+        this.isDelete = isDelete;
+    }
+
+    public String getIsValid()
+    {
+        return isValid;
+    }
+
+    public void setIsValid(String isValid)
+    {
+        this.isValid = isValid;
+    }
+
+    public Date getCreateTime()
+    {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime)
+    {
+        this.createTime = createTime;
+    }
+
+    public String getCreateBy()
+    {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy)
+    {
+        this.createBy = createBy;
+    }
+
+    public Date getUpdateTime()
+    {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime)
+    {
+        this.updateTime = updateTime;
+    }
+
+    public String getUodateBy()
+    {
+        return uodateBy;
+    }
+
+    public void setUodateBy(String uodateBy)
+    {
+        this.uodateBy = uodateBy;
+    }
+
+    public static long getSerialversionuid()
+    {
+        return serialVersionUID;
+    }
 
     @Override
     public String toString()
     {
         return "User [id=" + id + ", organizationId=" + organizationId + ", username=" + username + ", realname="
             + realname + ", password=" + password + ", salt=" + salt + ", gender=" + gender + ", imgUrl=" + imgUrl
-            + ", roleIds=" + roleIds + ", locked=" + locked + "]";
+            + ", roleIds=" + roleIds + ", locked=" + locked + ", isDelete=" + isDelete + ", isValid=" + isValid
+            + ", createTime=" + createTime + ", createBy=" + createBy + ", updateTime=" + updateTime + ", uodateBy="
+            + uodateBy + "]";
     }
 
 }

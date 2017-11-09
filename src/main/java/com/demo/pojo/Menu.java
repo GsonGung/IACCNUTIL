@@ -49,11 +49,11 @@ public class Menu implements Serializable
     
     private String target;
     
-    private int isMenu;
+    private String type;
     
-    private int allowExpand;
+    private String allowExpand;
     
-    private int isPublic;
+    private String isPublic;
     
     private String allowEdit;
     
@@ -63,34 +63,34 @@ public class Menu implements Serializable
     
     private int sortCode;
     
-    private int deleteMark;
+    private String isDelete;
     
-    private int enabledMark;
+    private String available;
     
     private String description;
     
-    private Date createDate;
+    private String deleteReason;
     
-    private String createUserId;
+    private String permissionName;
     
-    private String createUserName;
+    private Date createTime;
     
-    private Date modifyDate;
+    private String createBy;
     
-    private String modifyUserId;
+    private Date updateTime;
     
-    private String modifyUserName;
+    private String updateBy;
     
     public Menu()
     {
     }
-    
+
     public Menu(int id, String moduleId, String parentId, String enCode, String fullName, String icon,
-        String urlAddress, String target, int isMenu, int allowExpand, int isPublic, String allowEdit,
-        String allowDelete, int status, int sortCode, int deleteMark, int enabledMark, String description,
-        Date createDate, String createUserId, String createUserName, Date modifyDate, String modifyUserId,
-        String modifyUserName)
+        String urlAddress, String target, String type, String allowExpand, String isPublic, String allowEdit,
+        String allowDelete, int status, int sortCode, String isDelete, String available, String description,
+        String deleteReason, String permissionName, Date createTime, String createBy, Date updateTime, String updateBy)
     {
+        super();
         this.id = id;
         this.moduleId = moduleId;
         this.parentId = parentId;
@@ -99,261 +99,273 @@ public class Menu implements Serializable
         this.icon = icon;
         this.urlAddress = urlAddress;
         this.target = target;
-        this.isMenu = isMenu;
+        this.type = type;
         this.allowExpand = allowExpand;
         this.isPublic = isPublic;
         this.allowEdit = allowEdit;
         this.allowDelete = allowDelete;
         this.status = status;
         this.sortCode = sortCode;
-        this.deleteMark = deleteMark;
-        this.enabledMark = enabledMark;
+        this.isDelete = isDelete;
+        this.available = available;
         this.description = description;
-        this.createDate = createDate;
-        this.createUserId = createUserId;
-        this.createUserName = createUserName;
-        this.modifyDate = modifyDate;
-        this.modifyUserId = modifyUserId;
-        this.modifyUserName = modifyUserName;
+        this.deleteReason = deleteReason;
+        this.permissionName = permissionName;
+        this.createTime = createTime;
+        this.createBy = createBy;
+        this.updateTime = updateTime;
+        this.updateBy = updateBy;
     }
-    
+
     public int getId()
     {
         return id;
     }
-    
+
     public void setId(int id)
     {
         this.id = id;
     }
-    
+
     public String getModuleId()
     {
         return moduleId;
     }
-    
+
     public void setModuleId(String moduleId)
     {
         this.moduleId = moduleId;
     }
-    
+
     public String getParentId()
     {
         return parentId;
     }
-    
+
     public void setParentId(String parentId)
     {
         this.parentId = parentId;
     }
-    
+
     public String getEnCode()
     {
         return enCode;
     }
-    
+
     public void setEnCode(String enCode)
     {
         this.enCode = enCode;
     }
-    
+
     public String getFullName()
     {
         return fullName;
     }
-    
+
     public void setFullName(String fullName)
     {
         this.fullName = fullName;
     }
-    
+
     public String getIcon()
     {
         return icon;
     }
-    
+
     public void setIcon(String icon)
     {
         this.icon = icon;
     }
-    
+
     public String getUrlAddress()
     {
         return urlAddress;
     }
-    
+
     public void setUrlAddress(String urlAddress)
     {
         this.urlAddress = urlAddress;
     }
-    
+
     public String getTarget()
     {
         return target;
     }
-    
+
     public void setTarget(String target)
     {
         this.target = target;
     }
-    
-    public int getIsMenu()
+
+    public String getType()
     {
-        return isMenu;
+        return type;
     }
-    
-    public void setIsMenu(int isMenu)
+
+    public void setType(String type)
     {
-        this.isMenu = isMenu;
+        this.type = type;
     }
-    
-    public int getAllowExpand()
+
+    public String getAllowExpand()
     {
         return allowExpand;
     }
-    
-    public void setAllowExpand(int allowExpand)
+
+    public void setAllowExpand(String allowExpand)
     {
         this.allowExpand = allowExpand;
     }
-    
-    public int getIsPublic()
+
+    public String getIsPublic()
     {
         return isPublic;
     }
-    
-    public void setIsPublic(int isPublic)
+
+    public void setIsPublic(String isPublic)
     {
         this.isPublic = isPublic;
     }
-    
+
     public String getAllowEdit()
     {
         return allowEdit;
     }
-    
+
     public void setAllowEdit(String allowEdit)
     {
         this.allowEdit = allowEdit;
     }
-    
+
     public String getAllowDelete()
     {
         return allowDelete;
     }
-    
+
     public void setAllowDelete(String allowDelete)
     {
         this.allowDelete = allowDelete;
     }
-    
+
     public int getStatus()
     {
         return status;
     }
-    
+
     public void setStatus(int status)
     {
         this.status = status;
     }
-    
+
     public int getSortCode()
     {
         return sortCode;
     }
-    
+
     public void setSortCode(int sortCode)
     {
         this.sortCode = sortCode;
     }
-    
-    public int getDeleteMark()
+
+    public String getIsDelete()
     {
-        return deleteMark;
+        return isDelete;
     }
-    
-    public void setDeleteMark(int deleteMark)
+
+    public void setIsDelete(String isDelete)
     {
-        this.deleteMark = deleteMark;
+        this.isDelete = isDelete;
     }
-    
-    public int getEnabledMark()
+
+    public String getAvailable()
     {
-        return enabledMark;
+        return available;
     }
-    
-    public void setEnabledMark(int enabledMark)
+
+    public void setAvailable(String available)
     {
-        this.enabledMark = enabledMark;
+        this.available = available;
     }
-    
+
     public String getDescription()
     {
         return description;
     }
-    
+
     public void setDescription(String description)
     {
         this.description = description;
     }
-    
-    public Date getCreateDate()
+
+    public String getDeleteReason()
     {
-        return createDate;
+        return deleteReason;
     }
-    
-    public void setCreateDate(Date createDate)
+
+    public void setDeleteReason(String deleteReason)
     {
-        this.createDate = createDate;
+        this.deleteReason = deleteReason;
     }
-    
-    public String getCreateUserId()
+
+    public String getPermissionName()
     {
-        return createUserId;
+        return permissionName;
     }
-    
-    public void setCreateUserId(String createUserId)
+
+    public void setPermissionName(String permissionName)
     {
-        this.createUserId = createUserId;
+        this.permissionName = permissionName;
     }
-    
-    public String getCreateUserName()
+
+    public Date getCreateTime()
     {
-        return createUserName;
+        return createTime;
     }
-    
-    public void setCreateUserName(String createUserName)
+
+    public void setCreateTime(Date createTime)
     {
-        this.createUserName = createUserName;
+        this.createTime = createTime;
     }
-    
-    public Date getModifyDate()
+
+    public String getCreateBy()
     {
-        return modifyDate;
+        return createBy;
     }
-    
-    public void setModifyDate(Date modifyDate)
+
+    public void setCreateBy(String createBy)
     {
-        this.modifyDate = modifyDate;
+        this.createBy = createBy;
     }
-    
-    public String getModifyUserId()
+
+    public Date getUpdateTime()
     {
-        return modifyUserId;
+        return updateTime;
     }
-    
-    public void setModifyUserId(String modifyUserId)
+
+    public void setUpdateTime(Date updateTime)
     {
-        this.modifyUserId = modifyUserId;
+        this.updateTime = updateTime;
     }
-    
-    public String getModifyUserName()
+
+    public String getUpdateBy()
     {
-        return modifyUserName;
+        return updateBy;
     }
-    
-    public void setModifyUserName(String modifyUserName)
+
+    public void setUpdateBy(String updateBy)
     {
-        this.modifyUserName = modifyUserName;
+        this.updateBy = updateBy;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Menu [id=" + id + ", moduleId=" + moduleId + ", parentId=" + parentId + ", enCode=" + enCode
+            + ", fullName=" + fullName + ", icon=" + icon + ", urlAddress=" + urlAddress + ", target=" + target
+            + ", type=" + type + ", allowExpand=" + allowExpand + ", isPublic=" + isPublic + ", allowEdit=" + allowEdit
+            + ", allowDelete=" + allowDelete + ", status=" + status + ", sortCode=" + sortCode + ", isDelete="
+            + isDelete + ", available=" + available + ", description=" + description + ", deleteReason=" + deleteReason
+            + ", permissionName=" + permissionName + ", createTime=" + createTime + ", createBy=" + createBy + ", updateTime="
+            + updateTime + ", updateBy=" + updateBy + "]";
     }
 }

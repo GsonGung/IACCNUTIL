@@ -186,13 +186,13 @@
 		$(document).ready(function() {
 			//记住密码功能
 			var str = getCookie("loginInfo");
+			//Cookie不存在
 			if($.trim(str) == ''){
 				$("#RemeberMe").prop("checked", false);
 				return;
 			}
-			str = str.substring(1, str.length - 1);
-			var username = str.split(",")[0];
-			var password = str.split(",")[1];
+			var username = str.split("#")[0];
+			var password = str.split("#")[1];
 			//自动填充用户名和密码
 			$("#emp_DomainName").val(username);
 			$("#emp_Password").val(password);

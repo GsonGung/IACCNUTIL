@@ -37,7 +37,7 @@ public class LoginServiceImpl implements LoginService
     @Override
     public User queryUserByAccount(String username, String password)
     {
-        return userDao.selectByAccount(username, password);
+        return userDao.select(username, password);
     }
 
     @Override

@@ -27,7 +27,7 @@ import com.demo.pojo.User;
  */
 public interface UserDao
 {
-    User selectByAccount(@Param("username") String username, @Param("password") String password);
+    User select(@Param("username") String username, @Param("password") String password);
 
     List<User> findOtherUsers(String username);
 

@@ -22,7 +22,6 @@ public class HomeService implements IHomeService {
     @Override
     public List<Menu> toLoadMenuList()
     {
-        // TODO Auto-generated method stub
         return homeDao.toLoadMenuList();
     }
 

@@ -201,7 +201,6 @@ var login = {
  * @returns
  */
 function loginValiDate(){
-	
 	 //登录名
 	 var emp_DomainName = $("#emp_DomainName").val();
 	 //登录密码
