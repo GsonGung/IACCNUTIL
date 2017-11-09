@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.common.Constant;
+import com.demo.exception.BizHandlerException;
 import com.demo.exception.CaptchaException;
 import com.demo.exception.ConnectException;
 import com.demo.exception.DisabledCorpException;
@@ -110,7 +111,7 @@ public class LoginController extends BaseController
         String emp_Password = request.getParameter("emp_Password");
         //记住用户名、密码功能(注意：cookie存放密码会存在安全隐患)
         String remFlag = request.getParameter("remFlag");
-        System.out.println(emp_DomainName + "=" + emp_Password + "=" + remFlag);
+        logger.info(emp_DomainName + "=" + emp_Password + "=" + remFlag);
         
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(emp_DomainName, emp_Password);
@@ -121,24 +122,22 @@ public class LoginController extends BaseController
             subject.login(token);
             //查询数据库验证
             User user = loginService.queryUserByAccount(emp_DomainName, emp_Password);
+            
+            if(user == null) {
+                throw new BizHandlerException("用户账户不存在");
+            }
+            
             //用户账号添加到Session
             session.setAttribute("user", user);
             
             List<User> userList = loginService.queryExcludeUserList(emp_DomainName);
             session.setAttribute("userList", userList);
             logger.info("userList:" + userList);
-            
             logger.info("用户<" + user.getRealname() + ">登录系统了......");
 
             if ("true".equals(remFlag))
             {
-                //如果cookie已存在直接登录成功
-                Cookie[] cookies = request.getCookies();
-                Stream<Cookie> stream = Stream.of(cookies);
-                if(stream.anyMatch(c -> "loginInfo".equals(c.getName()))) {
-                    resultJson ="0000";
-                }
-                String loginInfo = emp_DomainName + "," + emp_Password;
+                String loginInfo = emp_DomainName + "#" + emp_Password;
                 Cookie userCookie = new Cookie("loginInfo", loginInfo);
                 userCookie.setMaxAge(30 * 24 * 60 * 60); //存活期为一个月 30*24*60*60
                 userCookie.setPath("/");
@@ -158,30 +157,29 @@ public class LoginController extends BaseController
         }
         catch (UnknownAccountException uae)
         {
-            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,未知账户");
-            request.setAttribute("message_login", "未知账户");
+            logger.error("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,未知账户");
+            uae.printStackTrace();
         }
         catch (IncorrectCredentialsException ice)
         {
-            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,错误的凭证");
-            request.setAttribute("message_login", "密码不正确");
+            logger.error("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,错误的凭证");
+            ice.printStackTrace();
         }
         catch (LockedAccountException lae)
         {
-            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,账户已锁定");
-            request.setAttribute("message_login", "账户已锁定");
+            logger.error("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,账户已锁定");
+            lae.printStackTrace();
         }
         catch (ExcessiveAttemptsException eae)
         {
-            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,错误次数过多");
-            request.setAttribute("message_login", "用户名或密码错误次数过多");
+            logger.error("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,错误次数过多");
+            eae.printStackTrace();
         }
         catch (AuthenticationException ae)
         {
             //通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
-            System.out.println("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,堆栈轨迹如下");
+            logger.error("对用户[" + emp_DomainName + "]进行登录验证..验证未通过,堆栈轨迹如下");
             ae.printStackTrace();
-            request.setAttribute("message_login", "用户名或密码不正确");
         }
         catch (Exception e)
         {

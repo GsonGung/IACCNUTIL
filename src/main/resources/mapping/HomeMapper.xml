@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.HomeDao">
+    <resultMap id="BaseResultMap" type="com.demo.pojo.Menu">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="module_id" jdbcType="VARCHAR" property="moduleId"/>
+        <result column="parent_id" jdbcType="TINYINT" property="parentId"/>
+        <result column="en_code" jdbcType="TINYINT" property="enCode"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="url_address" jdbcType="VARCHAR" property="urlAddress"/>
+        <result column="target" jdbcType="VARCHAR" property="target"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="allow_expand" jdbcType="CHAR" property="allowExpand"/>
+        <result column="is_public" jdbcType="CHAR" property="isPublic"/>
+        <result column="allow_edit" jdbcType="CHAR" property="allowEdit"/>
+        <result column="allow_delete" jdbcType="CHAR" property="allowDelete"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="sort_code" jdbcType="VARCHAR" property="sortCode"/>
+        <result column="is_delete" jdbcType="CHAR" property="isDelete"/>
+        <result column="available" jdbcType="CHAR" property="available"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="delete_reason" jdbcType="VARCHAR" property="deleteReason"/>
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        P.*
+    </sql>
+    <select id="toLoadMenuList" resultMap="BaseResultMap">
+        SELECT 
+        	<include refid="Base_Column_List"/> 
+        FROM 
+        	PERMISSIONS P
+        INNER JOIN ROLES_PERMISSIONS RP ON RP.PERMISSION = P.PERMISSION_NAME
+        INNER JOIN USER_ROLES UR ON UR.ROLE_NAME = RP.ROLE_NAME
+        INNER JOIN USERS U ON U.USERNAME = UR.USERNAME
+        WHERE
+        	U.USERNAME = #{username}  	
+    </select>
+
+</mapper>

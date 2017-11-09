@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,8 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.demo.dao.UserDao;
 import com.demo.pojo.Menu;
+import com.demo.pojo.User;
 import com.demo.service.IHomeService;
 
 /**
@@ -127,7 +128,9 @@ public class HomeController extends BaseController
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         List<Menu> list = new ArrayList<>();
-        list = iHomeService.toLoadMenuList();
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        list = iHomeService.toLoadMenuList(user.getUsername());
         Map < String , Object > jsonMap = new HashMap< String , Object>();  
         jsonMap.put("list", list);
         String str = JSONObject.toJSONString(jsonMap,SerializerFeature.WriteMapNullValue);  
@@ -618,14 +621,15 @@ public class HomeController extends BaseController
     
     /**
      * 
-     * <toRoleConfig>
+     * <toRoleManager>
      * <功能详细描述>
      * @return
      * @see [类、类#方法、类#成员]
      */
-    @RequestMapping("toRoleConfig")
-    public String toRoleConfig()
+    @RequestMapping("toRoleManager")
+    public String toRoleManager()
     {
         return "/pages/role/list";
     }
+    
 }

@@ -21,7 +21,7 @@ import com.demo.listener.QueueListener;
  * @author Administrator
  *
  */
-@Component("queueSender")
+//@Component("queueSender")
 public class QueueSender {
 	
 	private static Log logger = LogFactory.getLog(QueueSender.class);

@@ -24,8 +24,8 @@ import com.demo.producer.TopicSender;
  * @author liang
  * @description controller测试
  */
-@Controller
-@RequestMapping("/activemq")
+/*@Controller
+@RequestMapping("/activemq")*/
 public class ActivemqController
 {
     private static Log logger = LogFactory.getLog(ActivemqController.class);

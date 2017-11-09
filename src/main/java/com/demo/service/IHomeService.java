@@ -10,6 +10,6 @@ import com.demo.pojo.Menu;
  */
 public interface IHomeService {
 
-    List<Menu> toLoadMenuList();
+    List<Menu> toLoadMenuList(String username);
 
 }

@@ -11,8 +11,6 @@
 package com.demo.realm;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -26,11 +24,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import com.alibaba.druid.pool.DruidDataSource;
 
 /**
  * <自定义的指定Shiro验证用户登录的类 >
@@ -46,18 +40,9 @@ public class MyRealm extends JdbcRealm
 {
 	
 	private static Log logger = LogFactory.getLog(MyRealm.class);
+
+    protected static final String DEFAULT_SALTED_AUTHENTICATION_QUERY = "select password, salt from users where username = ?";
 	
-	protected static final String DEFAULT_PERMISSIONS_QUERY = "select role_name,group_concat(permission) 'permissions' from roles_permissions group by role_name";
-	
-    @Autowired
-    @Qualifier(value="dataSource2")
-    private DruidDataSource dataSource2;
-    
-    public MyRealm() {
-    	//配置数据源
-    	super.setDataSource(dataSource2);
-    }
-    
     /** 
      * 为当前登录的Subject授予角色和权限 
      * @see 经测试:本例中该方法的调用时机为需授权资源被访问时 
@@ -66,7 +51,7 @@ public class MyRealm extends JdbcRealm
      * @see 比如说这里从数据库获取权限信息时,先去访问Spring3.1提供的缓存,而不使用Shior提供的AuthorizationCache 
      */  
     @Override  
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){  
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
         AuthorizationInfo authzInfo = super.doGetAuthorizationInfo(principals);
         Collection<String> roles = authzInfo.getRoles();
         String username = String.valueOf(super.getAvailablePrincipal(principals));

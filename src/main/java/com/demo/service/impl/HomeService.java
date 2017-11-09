@@ -20,10 +20,9 @@ public class HomeService implements IHomeService {
     private HomeDao homeDao;
     
     @Override
-    public List<Menu> toLoadMenuList()
+    public List<Menu> toLoadMenuList(String username)
     {
-        // TODO Auto-generated method stub
-        return homeDao.toLoadMenuList();
+        return homeDao.toLoadMenuList(username);
     }
 
 }

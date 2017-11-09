@@ -26,6 +26,6 @@ import com.demo.pojo.Menu;
 public interface HomeDao
 {
 
-    List<Menu> toLoadMenuList();
+    List<Menu> toLoadMenuList(String username);
     
 }

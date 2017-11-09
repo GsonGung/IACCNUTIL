@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * 
  */
 
-@Component("topicSender")
+//@Component("topicSender")
 public class TopicSender
 {
 	private static Log logger = LogFactory.getLog(TopicSender.class);
