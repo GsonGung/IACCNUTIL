@@ -10,12 +10,19 @@
  */
 package com.demo.controller;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
+import com.demo.pojo.Roles;
+import com.demo.pojo.User;
 import com.demo.service.RoleService;
 
 /**
@@ -46,5 +53,146 @@ public class RoleController
     public Object getRoleList()
     {
         return roleService.getRoleList();
+    }
+    
+    /**
+     * 
+     * <detail>
+     * <功能详细描述>
+     * @param role
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("detail")
+    public String detail(HttpSession session, Model model, Integer id, String type)
+    {
+        if(id == null) {
+            model.addAttribute("type", type);
+            return "/pages/role/detail";
+        }
+        
+        Roles role = roleService.findRole(id);
+        model.addAttribute("role", role);
+        model.addAttribute("type", type);
+        return "/pages/role/detail";
+    }
+    
+    /**
+     * 
+     * <permissionTree>
+     * <功能详细描述>
+     * @param role
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("permissionTree")
+    @ResponseBody
+    public Object permissionTree(@RequestParam("id") Integer roleId)
+    {
+        try {
+            return roleService.findPermissions(roleId);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * <addRole>
+     * <功能详细描述>
+     * @param role
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("addRole")
+    @ResponseBody
+    public Object addRole(HttpSession session, Roles role)
+    {
+        try {
+            System.out.println("添加角色信息："+role);
+            User user = (User)session.getAttribute("user");
+            role.setCreateBy(user.getRealname());
+            role.setCreateTime(new Date());
+            return roleService.addRole(role);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * <editRole>
+     * <功能详细描述>
+     * @param role
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("editRole")
+    @ResponseBody
+    public Object editRole(HttpSession session, Roles role)
+    {
+        try {
+            System.out.println("修改角色信息："+role);
+            User user = (User)session.getAttribute("user");
+            role.setUpdateBy(user.getRealname());
+            role.setUpdateTime(new Date());
+            return roleService.updateRole(role);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * <delRole>
+     * <功能详细描述>
+     * @param role
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("delRole")
+    @ResponseBody
+    public Object delRole(Integer id)
+    {
+        try {
+            return roleService.delRole(id);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * <delRoles>
+     * <功能详细描述>
+     * @param role
+     * @return
+     * @see [类、类#方法、类#成员]
+     */
+    @RequestMapping("delRoles")
+    @ResponseBody
+    public Object delRoles(String ids)
+    {
+        try {
+            String[] split = ids.split(",");
+            int rows = 0;
+            for(String id : split) {
+                roleService.delRole(Integer.parseInt(id));
+                rows++;
+            }
+            return rows;
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }

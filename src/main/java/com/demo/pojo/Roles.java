@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class Roles {
     private Integer id;
+    
+    private String roleCode;
 
     private String roleName;
 
@@ -25,6 +27,16 @@ public class Roles {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getRoleCode()
+    {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode)
+    {
+        this.roleCode = roleCode;
     }
 
     public String getRoleName() {
@@ -81,5 +93,13 @@ public class Roles {
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy == null ? null : updateBy.trim();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Roles [id=" + id + ", roleCode=" + roleCode + ", roleName=" + roleName + ", description=" + description
+            + ", available=" + available + ", createTime=" + createTime + ", createBy=" + createBy + ", updateTime="
+            + updateTime + ", updateBy=" + updateBy + "]";
     }
 }

@@ -11,6 +11,7 @@
 package com.demo.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.demo.pojo.Roles;
 
 /**
  * <一句话功能简述>
@@ -24,4 +25,14 @@ import com.alibaba.fastjson.JSONObject;
 public interface RoleService
 {
     JSONObject getRoleList();
+
+    int addRole(Roles role);
+
+    Roles findRole(Integer id);
+
+    int updateRole(Roles role);
+
+    int delRole(Integer id);
+
+	int findPermissions(Integer roleId);
 }
