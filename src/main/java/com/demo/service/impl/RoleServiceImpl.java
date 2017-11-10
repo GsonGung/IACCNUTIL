@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.demo.dao.RolesMapper;
+import com.demo.pojo.Roles;
 import com.demo.service.RoleService;
 
 /**
@@ -49,6 +50,30 @@ public class RoleServiceImpl implements RoleService
         json.put("data", roles);
         
         return json;
+    }
+
+    @Override
+    public int addRole(Roles role)
+    {
+        return rolesMapper.insertSelective(role);
+    }
+    
+    @Override
+    public int updateRole(Roles role)
+    {
+        return rolesMapper.updateByPrimaryKeySelective(role);
+    }
+
+    @Override
+    public Roles findRole(Integer id)
+    {
+        return rolesMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int delRole(Integer id)
+    {
+        return rolesMapper.deleteByPrimaryKey(id);
     }
     
 }

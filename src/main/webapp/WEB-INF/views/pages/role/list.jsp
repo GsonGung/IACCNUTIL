@@ -79,9 +79,10 @@
 								<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
 								<button class="layui-btn" data-type="isAll">验证是否全选</button>
 								<button class="layui-btn" data-type="addRole">新增</button>
+								<button class="layui-btn" data-type="delRoles">删除</button>
 							</div>
 							<table class="layui-table"
-								lay-data="{height:315, url:'<%=basePath%>role/getRoleList', page:true, id:'test'}"
+								lay-data="{height:471, url:'<%=basePath%>role/getRoleList', page:true, id:'test', limit: 10}"
 								lay-filter="test">
 								<thead>
 									<tr>
@@ -93,8 +94,7 @@
 										<th lay-data="{field:'create_by', width:100}">创建人员</th>
 										<th lay-data="{field:'create_time', width:200, sort: true}">创建时间</th>
 										<th lay-data="{field:'description', width:300}">备注</th>
-										<th
-											lay-data="{fixed: 'right', toolbar: '#barDemo', width:150}">操作</th>
+										<th lay-data="{fixed: 'right', toolbar: '#barDemo', width:150}">操作</th>
 									</tr>
 								</thead>
 							</table>
@@ -154,14 +154,10 @@
 	<script src="<%=commonPath%>dist/js/demo.js"></script>
 	<!-- Layer Tree -->
 	<script src="<%=layerPath%>layui.js" charset="utf-8"></script>
-	<script type="text/html" id="barDemo">
-  		<a class="layui-btn layui-btn-mini" lay-event="detail">查看</a>
-  		<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
-  		<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
-	</script>
 	<!-- tree script -->
 	<script type="text/javascript">
-		layui.use('tree', function() {
+		
+/* 		layui.use('tree', function() {
 			layui.tree({
 				elem : '#demo',
 				nodes : [ { //节点数据
@@ -184,16 +180,18 @@
 					console.log(node) //node即为当前点击的节点数据
 				}
 			});
-		});
+		}); */
 	</script>
 	<!-- tree script -->
 	<script type="text/javascript">
+		var basePath = '<%=basePath%>';
 		layui.use('table', function() {
 			var table = layui.table;
 			
 			//监听表格复选框选择
 			table.on('checkbox(test)', function(obj) {
-				console.log(obj)
+				console.log(obj);
+				return false;
 			});
 
 			//监听单元格编辑
@@ -208,19 +206,44 @@
 			table.on('tool(test)', function(obj) {
 				var data = obj.data;
 				if (obj.event === 'del') {
-					layer.confirm('真的删除行么', function(index) {
-						obj.del();
-						layer.close(index);
+					layer.confirm('确定删除么?', function(index) {
+/* 						obj.del();//删除DOM
+						layer.close(index);//删除缓存 */
+						url = basePath + 'role/delRole?id='+data.id;
+						//调用后台
+					  	$.ajax({
+						    url: url,
+							method : "post",
+							dataType : "json",
+							async : false,
+							success : function(data) {
+								layer.msg("删除成功！",{time:2000});
+							},
+							error : function() {
+								layer.msg("删除失败！",{time:2000});
+							}
+						});
+						table.reload('test', layer.options);
 					});
 				} else if (obj.event === 'edit') {
-					layer.prompt({
-						formType : 2,
-						value : data.username
-					}, function(value, index) {
-						obj.update({
-							username : value
-						});
-						layer.close(index);
+					layer.open({  
+					    type: 2,  
+					    title: ['修改角色信息', 'background-color: #00bb9d;text-align:center;'],  
+					    shadeClose: true,  
+					    shade: false,  
+					    maxmin: true,  
+					    area: ['893px', '600px'],  
+					    content: basePath + 'role/detail?id=' + data.id + '&type=edit',
+					    btn: [],
+					    closeBtn: 1,
+					    yes: function(){
+					    },
+					  	cancel: function(){ 
+					  	    //右上角关闭回调
+					  	    //return false 开启该代码可禁止点击该按钮关闭
+					  	},
+						end : function() {
+						}
 					});
 				}
 			});
@@ -256,7 +279,52 @@
 					layer.msg(checkStatus.isAll ? '全选' : '未全选')
 				},
 				addRole : function(){
-					alert("新增");
+					layer.open({  
+					    type: 2,  
+					    title: ['新增角色信息', 'background-color: #00bb9d;text-align:center;'],  
+					    shadeClose: true,  
+					    shade: false,  
+					    maxmin: true,  
+					    area: ['893px', '600px'],  
+					    content: basePath + 'role/detail?type=add',
+					    btn: [],
+					    closeBtn: 1,
+					  	cancel: function(){ 
+					  	    //右上角关闭回调
+					  	    //return false 开启该代码可禁止点击该按钮关闭
+					  	},
+						end : function() {
+						}
+					});
+				},
+				delRoles : function(){
+					var checkStatus = table.checkStatus('test'), data = checkStatus.data;
+					var ids = '';
+					data.forEach(function(value, index){
+						var id = value.id;
+						if(index == 0){
+							ids += id;
+						}else{
+							ids += ',' + id;
+						}
+					});
+					layer.confirm('确定批量删除么?', function(index) {
+						url = basePath + 'role/delRoles?ids='+ids;
+						//调用后台
+					  	$.ajax({
+						    url: url,
+							method : "post",
+							dataType : "json",
+							async : false,
+							success : function(data) {
+								layer.msg("删除成功！",{time:2000});
+							},
+							error : function() {
+								layer.msg("删除失败！",{time:2000});
+							}
+						});
+						table.reload('test', layer.options);
+					});
 				},
 				parseTable : function() {
 					table.init('parse-table-demo');
@@ -267,10 +335,10 @@
 				var type = $(this).data('type');
 				active[type] ? active[type].call(this) : '';
 			});
-			
-		  var layer = layui.layer;
-		  layer.msg('hello');
-		});
+
+			/* 		  var layer = layui.layer;
+			 layer.msg('hello'); */
+			});
 	</script>
 </body>
 </html>
