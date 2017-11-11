@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.demo.dao.PermissionsMapper;
 import com.demo.dao.RolesMapper;
+import com.demo.pojo.Permissions;
 import com.demo.pojo.Roles;
 import com.demo.service.RoleService;
 
@@ -36,6 +38,9 @@ public class RoleServiceImpl implements RoleService
     
     @Autowired
     private RolesMapper rolesMapper;
+    
+	@Autowired
+	private PermissionsMapper permissionsMapper;
     
     /** {@inheritDoc} */
     @Override
@@ -77,9 +82,12 @@ public class RoleServiceImpl implements RoleService
     }
 
 	@Override
-	public int findPermissions(Integer roleId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<Permissions> findPermissions(Integer roleId) {
+		return permissionsMapper.selectByRoleId(roleId);
 	}
     
+	@Override
+	public List<Permissions> findAllPermissions() {
+		return permissionsMapper.selectForAllRoles();
+	}
 }

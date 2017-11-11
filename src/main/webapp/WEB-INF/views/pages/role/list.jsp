@@ -88,7 +88,7 @@
 										<th lay-data="{field:'id', width:80, sort: true}">编号</th>
 										<th lay-data="{field:'role_name', width:100}">角色名称</th>
 										<th lay-data="{field:'role_code', width:100}">角色代码</th>
-										<th lay-data="{field:'permissions', width:100,  templet: '#permissionsTpl'}">拥有权限</th>
+										<th lay-data="{field:'permissions', toolbar: '#treeDemo', width:100}">拥有权限</th>
 										<th lay-data="{field:'create_by', width:100}">创建人员</th>
 										<th lay-data="{field:'create_time', width:200, sort: true}">创建时间</th>
 										<th lay-data="{field:'description', width:411}">备注</th>
@@ -101,6 +101,9 @@
 								<a class="layui-btn layui-btn-mini" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a> <a
 									class="layui-btn layui-btn-danger layui-btn-mini"
 									lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
+							</div>
+							<div class="layui-hide" id="treeDemo">
+  								<a class="layui-table-link" lay-event="config"><i class="layui-icon">&#xe615;配置</i></a>
 							</div>
 							<!-- /.box-header -->
 							<!-- /.box-body -->
@@ -153,10 +156,6 @@
 	<script src="<%=commonPath%>dist/js/demo.js"></script>
 	<!-- Layer Tree -->
 	<script src="<%=layerPath%>layui.js" charset="utf-8"></script>
-	<!-- permissionsTpl -->
-	<script type="text/html" id="titleTpl">
-  		<a href="<%=basePath%>/role/{{d.id}}" class="layui-table-link"><i class="layui-icon">&#xe615;</i></a>
-	</script>
 	<!-- table script -->
 	<script type="text/javascript">
 		var basePath = '<%=basePath%>';
@@ -209,6 +208,26 @@
 					    maxmin: true,  
 					    area: ['893px', '600px'],  
 					    content: basePath + 'role/detail?id=' + data.id + '&type=edit',
+					    btn: [],
+					    closeBtn: 1,
+					    yes: function(){
+					    },
+					  	cancel: function(){ 
+					  	    //右上角关闭回调
+					  	    //return false 开启该代码可禁止点击该按钮关闭
+					  	},
+						end : function() {
+						}
+					});
+				} else if (obj.event === 'config') {
+					layer.open({  
+					    type: 2,  
+					    title: ['配置角色权限', 'background-color: #00bb9d;text-align:center;'],  
+					    shadeClose: true,  
+					    shade: false,  
+					    maxmin: true,  
+					    area: ['893px', '600px'],  
+					    content: basePath + 'role/permissionTree?id=' + data.id,
 					    btn: [],
 					    closeBtn: 1,
 					    yes: function(){

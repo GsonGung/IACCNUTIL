@@ -10,7 +10,10 @@
  */
 package com.demo.service;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
+import com.demo.pojo.Permissions;
 import com.demo.pojo.Roles;
 
 /**
@@ -34,5 +37,7 @@ public interface RoleService
 
     int delRole(Integer id);
 
-	int findPermissions(Integer roleId);
+	List<Permissions> findPermissions(Integer roleId);
+
+	List<Permissions> findAllPermissions();
 }

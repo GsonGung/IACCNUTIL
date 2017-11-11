@@ -21,7 +21,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<!-- 弹出层 -->
-	<form id="popupForm" class="layui-form"> 
+	<form class="layui-form"> 
 	<input type="hidden" name="id" value="${role.id}">
 		<div class="layui-form-item">
 			<label class="layui-form-label"><span><font
