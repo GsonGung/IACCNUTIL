@@ -1,6 +1,7 @@
 package com.demo.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,13 @@ public class PermissionServiceImpl implements PermissionService {
 	private PermissionsMapper permissionsMapper;
 	
 	@Override
-	public List<Permissions> selectByRoleId(Integer roleId) {
+	public List<Map<String, String>> selectByRoleId(Integer roleId) {
 		return permissionsMapper.selectByRoleId(roleId);
+	}
+
+	@Override
+	public Permissions selectByPrimaryKey(Integer id) {
+		return permissionsMapper.selectByPrimaryKey(id);
 	}
 
 }

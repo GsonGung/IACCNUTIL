@@ -55,46 +55,90 @@
 	<script src="<%=commonPath%>bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="<%=layerPath%>layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
-		var permissions = ${permissions};
-		var roleId = ${roleId};
-		var nodes = [];
-		alert(JSON.stringify(permissions));
+		var permissions = JSON.parse('${permissions}');
+		var roleId = '${roleId}';
+		var jsonDataTree = transData(permissions, 'module_id', 'parent_id', 'children', 'role_id', roleId, 'checked');  
 		
 	 	layui.use('tree', function() {
+	 			var tree = layui.tree;
 				layui.tree({
 					elem : '#tree',
 					check: 'checkbox',
-					change: function (item) { //checkbox获取选中的值
-	                },
 	                click: function (item) { //点击节点回调
+	                	
 	                },
-	                checkedClick: function(item){
+	                checkedClick: function(item){//checkbox获取选中的值
+						
 	                },
 	                data: {//为元素添加额外数据，即在元素上添加data-xxx="yyy"，可选
 	                    hasChild: true,
 	                },
-					nodes : [ { //节点数据
-						name : '节点A',
-						checked : false,
-						children : [ {
-							name : '节点A1',
-							checked : false
-						} ]
-					}, {
-						name : '节点B',
-						children : [ {
-							name : '节点B1',
-							checked : true,
-							alias : 'bb' //可选
-							,
-							id : '123' //可选
-						}, {
-							name : '节点B2',
-							checked : false
-						} ]
-					} ],
+					nodes : jsonDataTree,
 				});
 			}); 
+	 	
+	 	/** 
+	 	 * json格式转树状结构 
+	 	 * @param   {json}      json数据 
+	 	 * @param   {String}    id的字符串 
+	 	 * @param   {String}    父id的字符串 
+	 	 * @param   {String}    children的字符串 
+	 	 * @return  {Array}     数组 
+	 	 */  
+	 	function transData(a, idStr, pidStr, chindrenStr, roleIdStr, roleId, checkedStr){  
+	 	    var r = [], hash = {}, id = idStr, pid = pidStr, children = chindrenStr, i = 0, j = 0, len = a.length;  
+	 	    for(; i < len; i++){
+	 	    	if(roleId == a[i][roleIdStr]){
+	 	    		a[i][checkedStr] = true;
+	 	    	}else{
+	 	    		a[i][checkedStr] = false;
+	 	    	}
+	 	        hash[a[i][id]] = a[i];  
+	 	    }  
+	 	    for(; j < len; j++){  
+	 	        var aVal = a[j], hashVP = hash[aVal[pid]];  
+	 	        if(hashVP){  
+	 	            !hashVP[children] && (hashVP[children] = []);  
+	 	            hashVP[children].push(aVal);  
+	 	        }else{  
+	 	            r.push(aVal);  
+	 	        }  
+	 	    }  
+	 	    //只保留顶级节点
+	 	    
+	 	    return r;  
+	 	}  
+	</script>
+	<script type="text/javascript">
+	layui.use('form', function(){
+		  var form = layui.form;
+		  var basePath = '<%=basePath%>';
+		  var url = basePath + 'role/updatePermissionTree?roleId=${roleId}&ids=';
+		  //监听提交
+		  form.on('submit(formDemo)', function(data){
+			  var treeNode = $(document).find('.layui-tree');
+			  var ids = treeNode.data('treeChecked');
+			  url += ids;
+			  
+			  $.ajax({
+				    url: url,
+					method : "post",
+					dataType : "json",
+					async : false,
+					data : data.field,
+					success : function(data) {
+						//假设这是iframe页
+						var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+						parent.layer.close(index); //再执行关闭  
+						//parent.layui.table.reload('test', parent.layer.options);不用刷新table
+						layer.msg("操作成功！",{time:2000});
+					},
+					error : function() {
+						layer.msg("操作失败！",{time:2000});
+					}
+				});
+			});
+		});
 	</script>
 </body>
 </html>

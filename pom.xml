@@ -19,10 +19,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- <dependency> <groupId>org.apache.activemq</groupId> <artifactId>activemq-broker</artifactId> 
-			<version>${activemq.version}</version> </dependency> <dependency> <groupId>org.apache.activemq</groupId> 
-			<artifactId>activemq-client</artifactId> <version>${activemq.version}</version> 
-			</dependency> -->
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-spring</artifactId>
@@ -310,6 +306,7 @@
 
 	<build>
 		<plugins>
+			<!-- 编译插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -320,7 +317,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-
+			<!-- 打war包插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>

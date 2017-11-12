@@ -227,10 +227,11 @@
 					    shade: false,  
 					    maxmin: true,  
 					    area: ['893px', '600px'],  
-					    content: basePath + 'role/permissionTree?id=' + data.id,
+					    content: basePath + 'role/toPermissionTree?id=' + data.id,
 					    btn: [],
 					    closeBtn: 1,
 					    yes: function(){
+					    	
 					    },
 					  	cancel: function(){ 
 					  	    //右上角关闭回调

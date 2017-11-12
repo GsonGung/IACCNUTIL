@@ -12,6 +12,7 @@ package com.demo.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,10 +23,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
+import com.demo.exception.BizHandlerException;
 import com.demo.pojo.Permissions;
 import com.demo.pojo.Roles;
+import com.demo.pojo.RolesPermissions;
 import com.demo.pojo.User;
+import com.demo.service.PermissionService;
+import com.demo.service.RolePermissionService;
 import com.demo.service.RoleService;
+import com.demo.utils.StringUtil;
 
 /**
  * <一句话功能简述> <功能详细描述>
@@ -38,8 +45,15 @@ import com.demo.service.RoleService;
 @Controller
 @RequestMapping("role")
 public class RoleController {
+	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private RolePermissionService rolePermissionService;
+	
+	@Autowired
+	private PermissionService permissionService;
 
 	/**
 	 * 
@@ -83,17 +97,51 @@ public class RoleController {
 	 * @return
 	 * @see [类、类#方法、类#成员]
 	 */
-	@RequestMapping("permissionTree")
-	public String permissionTree(@RequestParam("id") Integer roleId, Model model) {
+	@RequestMapping("toPermissionTree")
+	public String toPermissionTree(@RequestParam("id") Integer roleId, Model model) {
 		if (roleId == null) {
 			return "/pages/role/permission_tree";
 		}
 		
-		List<Permissions> permissions = roleService.findPermissions(roleId);
+		List<Map<String, String>> permissions = roleService.findAllPermissions();
 		
 		model.addAttribute("roleId", roleId);
-		model.addAttribute("permissions", permissions);
+		model.addAttribute("permissions", JSONArray.toJSONString(permissions));
 		return "/pages/role/permission_tree";
+	}
+	
+	/**
+	 * 
+	 * <updatePermissionTree> <功能详细描述>
+	 * 
+	 * @param role
+	 * @return
+	 * @see [类、类#方法、类#成员]
+	 */
+	@RequestMapping("updatePermissionTree")
+	@ResponseBody
+	public Object updatePermissionTree(String ids, String roleId, Model model, HttpSession session) {
+		if (StringUtil.isEmpty(ids)) {
+			throw new BizHandlerException("权限ID为空");
+		}
+		
+		User user = (User) session.getAttribute("user");
+		
+		Roles role = roleService.findRole(Integer.parseInt(roleId));
+		
+		rolePermissionService.delPermissionByRoleId(Long.parseLong(roleId));
+		String[] idArr = ids.split(",");
+		for(String id : idArr) {
+			Permissions permissions = permissionService.selectByPrimaryKey(Integer.parseInt(id));
+			RolesPermissions record = new RolesPermissions();
+			record.setRoleName(role.getRoleCode());
+			record.setPermission(permissions.getPermissionName());
+			record.setCreateBy(user.getRealname());
+			record.setCreateTime(new Date());
+			rolePermissionService.addPermission(record);
+		}
+		
+		return 0;
 	}
 
 	/**

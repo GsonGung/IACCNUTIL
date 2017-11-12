@@ -58,19 +58,13 @@ layui.define('jquery', function(exports) {
 												: icon.arrow[0]) + '</i>'
 								: '';
 					}()
-
 					// 复选框/单选框
 					, function() {
 						return options.check
 								? ('<i class="layui-icon layui-tree-check"  layui-check="'
-										+ (item.checked ? 'true' : 'fasle')
-										+ '">'
-										+ (options.check === 'checkbox'
-												? icon.checkbox[0]
-												: (options.check === 'radio'
-														? icon.radio[0]
-														: '')) + '</i>')
-								: '';
+										+ (item.checked ? 'true' : 'fasle')+ '" lay-id="' + item.id + '">'
+										+ (options.check === 'checkbox'? (item.checked ? icon.checkbox[1]:icon.checkbox[0]): 
+												(options.check === 'radio'? (item.checked ? icon.radio[1]:icon.radio[0]): '')) + '</i>'): '';
 					}()
 
 					// 节点
@@ -103,8 +97,7 @@ layui.define('jquery', function(exports) {
 			// 触发点击节点回调
 			typeof options.click === 'function' && that.click(li, item);
 			// 触发点击多选框回调
-			typeof options.checkedClick === 'function'
-					&& that.checkedClick(li, item);
+			typeof options.checkedClick === 'function'&& that.checkedClick(li, item);
 
 			// 伸展节点
 			that.spread(li, item);
@@ -119,13 +112,24 @@ layui.define('jquery', function(exports) {
 		var that = this, options = that.options;
 		elem.children('a').on('click', function(e) {
 					layui.stope(e);
-					options.click(item)
+					options.click(item);
 				});
 	};
 
 	// 点击多选框
 	Tree.prototype.checkedClick = function(elem, item) {
+		var ids = '';
 		var that = this, options = that.options;
+		var lay = $(".layui-tree").find('.layui-tree-check[layui-check=true]');
+		layui.each(lay, function(i, v) {
+					var lay_id = $(v).attr('lay-id');
+					ids += lay_id + ',';
+				});
+		if (ids != '') {
+			ids = ids.substr(0, ids.length - 1)
+		}
+		$(".layui-tree").data('treeChecked', ids);
+
 		elem.children(".layui-tree-check").on("click", function(e) {
 			var checkbox = this;
 			if (options.check == 'checkbox') {
@@ -145,8 +149,10 @@ layui.define('jquery', function(exports) {
 				ids = ids.substr(0, ids.length - 1)
 			}
 			rootNode.data('treeChecked', ids);
-			if ("function" == typeof options.change) {
-				layui.stope(e), options.change(ids);
+
+			if ("function" == typeof options.checkedClick) {
+				layui.stope(e);
+				options.checkedClick(ids);
 			}
 		})
 	};

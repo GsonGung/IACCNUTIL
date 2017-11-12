@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.dao.PermissionsMapper;
 import com.demo.dao.RolesMapper;
-import com.demo.pojo.Permissions;
 import com.demo.pojo.Roles;
 import com.demo.service.RoleService;
 
@@ -82,12 +81,12 @@ public class RoleServiceImpl implements RoleService
     }
 
 	@Override
-	public List<Permissions> findPermissions(Integer roleId) {
+	public List<Map<String, String>> findPermissions(Integer roleId) {
 		return permissionsMapper.selectByRoleId(roleId);
 	}
     
 	@Override
-	public List<Permissions> findAllPermissions() {
+	public List<Map<String, String>> findAllPermissions() {
 		return permissionsMapper.selectForAllRoles();
 	}
 }

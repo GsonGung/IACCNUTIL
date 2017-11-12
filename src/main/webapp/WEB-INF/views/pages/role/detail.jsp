@@ -64,7 +64,6 @@
 		  var basePath = '<%=basePath%>';
 		  //监听提交
 		  form.on('submit(formDemo)', function(data){
-			  console.log(JSON.stringify(data.field));
 			  var type = '${type}';
 			  if(type == 'add'){
 				  url = basePath + 'role/addRole';

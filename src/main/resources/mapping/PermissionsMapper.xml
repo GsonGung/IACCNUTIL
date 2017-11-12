@@ -38,26 +38,27 @@
     from permissions
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectForAllRoles" resultClass="java.util.Map">
+  <select id="selectForAllRoles" resultType="java.util.Map">
     select 
-    	p.id, p.module_id, p.parent_id, p.en_code, p.full_name, p.target, r.id roleId
+    	p.id, p.module_id, p.parent_id, p.full_name name, r.id role_id
     from 
     	permissions p
-    inner join 
+    left join 
     	roles_permissions rp on rp.permission = p.permission_name
-    inner join 
+    left join 
     	user_roles r on r.role_name = rp.role_name
   </select>
-  <select id="selectByRoleId" parameterType="java.lang.Integer" resultClass="java.util.Map">
+  <select id="selectByRoleId" parameterType="java.lang.Integer" resultType="java.util.Map">
     select 
-    	p.id, p.module_id, p.parent_id, p.en_code, p.full_name, p.target, r.id roleId
+    	p.id, p.module_id, p.parent_id, p.full_name name, r.id role_id
     from 
     	permissions p
     inner join 
     	roles_permissions rp on rp.permission = p.permission_name
     inner join 
     	user_roles r on r.role_name = rp.role_name
-    where r.id = #{roleId,jdbcType=INTEGER}
+    where 
+    	r.id = #{roleId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from permissions
