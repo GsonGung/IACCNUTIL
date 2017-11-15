@@ -99,4 +99,7 @@
 		<jms:listener destination="websocket.topic" ref="topicListener"/>
 	</jms:listener-container> -->
 	<!-- 消息消费者 end -->
+	
+	<!-- swagger配置 -->
+	<bean class="com.demo.swagger.MySwaggerConfig"></bean>
 </beans>

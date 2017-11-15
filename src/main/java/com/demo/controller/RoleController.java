@@ -33,6 +33,8 @@ import com.demo.service.PermissionService;
 import com.demo.service.RolePermissionService;
 import com.demo.service.RoleService;
 import com.demo.utils.StringUtil;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 /**
  * <一句话功能简述> <功能详细描述>
@@ -120,7 +122,8 @@ public class RoleController {
 	 */
 	@RequestMapping("updatePermissionTree")
 	@ResponseBody
-	public Object updatePermissionTree(String ids, String roleId, Model model, HttpSession session) {
+	@ApiOperation(value = "更新权限树", httpMethod = "POST", response = Object.class, notes = "update permission tree")
+	public Object updatePermissionTree(@ApiParam(required = true, name = "ids", value = "变更后拥有的权限ID集,中间用`，`分隔")String ids, String roleId, Model model, HttpSession session) {
 		if (StringUtil.isEmpty(ids)) {
 			throw new BizHandlerException("权限ID为空");
 		}
