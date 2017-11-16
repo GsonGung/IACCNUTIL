@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+    <context:component-scan base-package="com.demo.controller" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.demo.web.DateConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters>
+            <ref bean="mappingJacksonHttpMessageConverter"/>
+            <ref bean="stringHttpMessageConverter"/>
+            <ref bean="formHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- 自定义拦截器，拦截器放在前面的，优先执行的  开始 -->
+    <!-- 步骤一，自定义跨域请求处理 -->
+    <mvc:interceptors>
+        <!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.demo.interceptors.AccessKeyInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--步骤二： 自定义SpringMVC的Filter拦截器 -->
+    <mvc:interceptors>
+        <!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.demo.interceptors.DoFilterInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--步骤三： 自定义SpringMVC的Session拦截器 -->
+    <mvc:interceptors >     
+        <mvc:interceptor>     
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/login/**"/>
+            <bean class="com.demo.interceptors.SessionInterceptor"></bean>     
+        </mvc:interceptor>     
+    </mvc:interceptors> 
+    <!-- 自定义拦截器  结束 -->
+    <!-- interceptors --> 
+    
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <!-- 设置 默认语言为中文 -->
+        <property name="defaultLocale" value="zh_CN"/>
+    </bean>
+
+    <!--- StringHttpMessageConverter bean -->
+    <bean id="stringHttpMessageConverter"
+          class="org.springframework.http.converter.StringHttpMessageConverter">
+        <constructor-arg value="UTF-8" index="0"></constructor-arg>
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+                <value>application/json;charset=UTF-8</value>
+                <value>text/plain;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="objectMapper">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                <property name="dateFormat">
+                    <bean class="java.text.SimpleDateFormat">
+                        <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                    </bean>
+                </property>
+                <property name="featuresToDisable">
+                    <array>
+                        <!-- 空对象忽略 -->
+                        <util:constant
+                                static-field="com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS"/>
+                        <!--static-field="org.codehaus.jackson.map.SerializationConfig$Feature.FAIL_ON_EMPTY_BEANS" />-->
+                    </array>
+                </property>
+            </bean>
+        </property>
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+                <value>application/json;charset=UTF-8</value>
+                <value>application/x-www-form-urlencoded;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="formHttpMessageConverter"
+          class="org.springframework.http.converter.FormHttpMessageConverter"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:prefix="/WEB-INF/views/" p:suffix=".jsp"/>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:defaultEncoding="UTF-8" p:maxUploadSize="10485760"
+          p:maxInMemorySize="4096"><!-- 10M -->
+    </bean>
+</beans>

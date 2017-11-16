@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.demo.pojo.User">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="USERNAME" jdbcType="VARCHAR" property="username"/>
+        <result column="REALNAME" jdbcType="VARCHAR" property="realname"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="GENDER" jdbcType="VARCHAR" property="gender"/>
+        <result column="IMG_URL" jdbcType="VARCHAR" property="imgUrl"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        U.ID,U.USERNAME,U.REALNAME,U.PASSWORD,U.GENDER,U.IMG_URL
+    </sql>
+    <select id="selectByAccount" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM IACCN_USER_INFO U
+        WHERE U.USERNAME=#{username} and U.PASSWORD=#{password}
+    </select>
+    <select id="findUsers" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM IACCN_USER_INFO U
+    </select>
+    <select id="findOtherUsers" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM IACCN_USER_INFO U
+        WHERE U.USERNAME  &lt;> #{username}
+    </select>
+</mapper>
