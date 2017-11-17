@@ -46,6 +46,7 @@
 <!--     <mvc:resources mapping="/js/**" location="/resources/js/"/>  
     <mvc:resources mapping="/css/**" location="/resources/css/"/>  
     <mvc:resources mapping="/WEB-INF/**" location="/WEB-INF/"/> --> 
+    <mvc:resources mapping="/swagger/**" location="/swagger/"/>
     
 	<!-- 自定义拦截器，拦截器放在前面的，优先执行的 开始 -->
 	<!-- 步骤一，自定义跨域请求处理 -->
@@ -71,6 +72,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/login/**" />
+			<mvc:exclude-mapping path="/swagger/**" />
 			<bean class="com.demo.interceptors.SessionInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
